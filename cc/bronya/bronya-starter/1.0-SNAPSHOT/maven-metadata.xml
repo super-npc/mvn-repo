@@ -3,16 +3,16 @@
   <groupId>cc.bronya</groupId>
   <artifactId>bronya-starter</artifactId>
   <versioning>
-    <lastUpdated>20250324234347</lastUpdated>
+    <lastUpdated>20250325061610</lastUpdated>
     <snapshot>
-      <timestamp>20250324.234347</timestamp>
-      <buildNumber>1</buildNumber>
+      <timestamp>20250325.061610</timestamp>
+      <buildNumber>2</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>1.0-20250324.234347-1</value>
-        <updated>20250324234347</updated>
+        <value>1.0-20250325.061610-2</value>
+        <updated>20250325061610</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
