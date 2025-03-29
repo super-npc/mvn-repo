@@ -3,27 +3,27 @@
   <groupId>cc.bronya</groupId>
   <artifactId>bronya-admin-user</artifactId>
   <versioning>
-    <lastUpdated>20250326082027</lastUpdated>
+    <lastUpdated>20250329134735</lastUpdated>
     <snapshot>
-      <timestamp>20250326.082027</timestamp>
-      <buildNumber>3</buildNumber>
+      <timestamp>20250329.134735</timestamp>
+      <buildNumber>4</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
         <extension>jar</extension>
-        <value>1.0-20250326.082027-3</value>
-        <updated>20250326082027</updated>
+        <value>1.0-20250329.134735-4</value>
+        <updated>20250329134735</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>1.0-20250326.082027-3</value>
-        <updated>20250326082027</updated>
+        <value>1.0-20250329.134735-4</value>
+        <updated>20250329134735</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>sources</classifier>
         <extension>jar</extension>
-        <value>1.0-20250326.082027-3</value>
-        <updated>20250326082027</updated>
+        <value>1.0-20250329.134735-4</value>
+        <updated>20250329134735</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
