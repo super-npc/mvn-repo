@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud-demo</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bronya-cloud-demo-server</artifactId>
+    <name>${project.artifactId}</name>
+
+    <properties>
+        <!-- 开启 jib：mvn -Pjib package 会构建并推送 ${docker.registry}/bronya-cloud-demo-server -->
+        <jib.skip>false</jib.skip>
+        <jib.main.class>bronya.cloud.demo.BronyaCloudDemoServerApplication</jib.main.class>
+    </properties>
+    <description>演示服务实现</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-demo-api</artifactId>
+        </dependency>
+        <!-- 演示跨服务调用：依赖 user / sys 的 api 模块 -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-user-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-sys-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-spring-boot-starter-rpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-spring-boot-starter-monitor</artifactId>
+        </dependency>
+        <!-- Arthas 在线诊断（tunnel-only，零配置；详见 docs/adr/ADR-0013） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- admin UI: 1 行依赖拿到 index.html + amis/* + knife4j /doc.html + @Amis 扫描器 + IPlatform SPI
+             详见 bronya-cloud/docs/adr/0009-admin-ui-reuse-bronya-starter-db.md -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-plus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara.autotable</groupId>
+            <artifactId>auto-table-annotation</artifactId>
+            <version>2.5.15</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-core</artifactId>
+        </dependency>
+        <!-- ========== 数据库（MyBatis-Plus + PostgreSQL）========== -->
+        <dependency>
+            <groupId>org.dromara.mpe</groupId>
+            <artifactId>mybatis-plus-ext-spring-boot4-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- ========== 中间件能力演示（capability 包）==========
+             nacos-config：多 dataId/group 配置导入 + @RefreshScope 热刷新
+             sentinel：@SentinelResource 限流 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-generate-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!--
+      bronya 用 Java 25 + enable-preview 编译,本地 mvn spring-boot:run 必须同样启用 preview
+      (参考 bronya-parent/pom.xml 第 985-987 行同一被注释的占位;此处显式启用,仅影响 demo-server)
+    -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <agents>
+                        <agent>${skywalking.agent.path}</agent>
+                    </agents>
+                    <jvmArguments>--enable-preview</jvmArguments>
+                    <environmentVariables>
+                        <SW_AGENT_NAME>${project.artifactId}</SW_AGENT_NAME>
+                        <SW_AGENT_COLLECTOR_BACKEND_SERVICES>${skywalking.collector}</SW_AGENT_COLLECTOR_BACKEND_SERVICES>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
