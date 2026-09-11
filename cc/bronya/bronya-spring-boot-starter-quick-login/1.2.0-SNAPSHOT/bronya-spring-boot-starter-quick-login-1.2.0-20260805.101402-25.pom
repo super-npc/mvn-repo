@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-spring-boot-starter-quick-login</artifactId>
+    <description>轻量级登录（不需要系统用户），依赖 sa-token-quick-login + 自定义登录页面与资源</description>
+
+    <dependencies>
+        <!-- sa-token 核心：提供 cn.dev33.satoken.* 类（sa-token-quick-login 内声明为 optional，需显式引入） -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot4-starter</artifactId>
+        </dependency>
+        <!-- amis 扫描注解 @AmisScan -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-quick-login</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-common</artifactId>
+        </dependency>
+        <!-- QuickLoginMain 用 @AmisScan 声明模块（注解位于 starter-plus） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-plus</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

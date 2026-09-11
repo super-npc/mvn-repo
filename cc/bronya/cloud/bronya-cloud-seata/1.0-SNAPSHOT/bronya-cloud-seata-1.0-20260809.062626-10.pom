@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bronya-cloud-seata</artifactId>
+    <name>${project.artifactId}</name>
+    <description>Seata 分布式事务示例：AT 模式 + Nacos 注册/发现 Seata Server + PostgreSQL（account/storage/order + RestTemplate 自调用 XID 传播）</description>
+
+    <dependencies>
+        <!-- bronya 基础库（MyLogUtil 日志路径设置，与 FmzApp 启动风格对齐） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-shared</artifactId>
+        </dependency>
+        <!-- Seata 客户端（SCA 2025.1.0.0 内嵌 Seata 2.5.0） -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+        </dependency>
+        <!-- Nacos 注册中心（Seata 通过 nacos 发现 seata-server） -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- Nacos 配置中心（seata 客户端配置可走 nacos；本示例用 seata.* 本地属性，缺省可注释） -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!-- JDBC + WebMVC（业务表操作 + 自调用接口） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <!-- PostgreSQL 驱动 -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <agents>
+                        <agent>${skywalking.agent.path}</agent>
+                    </agents>
+                    <environmentVariables>
+                        <SW_AGENT_NAME>${project.artifactId}</SW_AGENT_NAME>
+                        <SW_AGENT_COLLECTOR_BACKEND_SERVICES>${skywalking.collector}</SW_AGENT_COLLECTOR_BACKEND_SERVICES>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
