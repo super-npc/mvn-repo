@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bronya-spring-boot-starter-metrics</artifactId>
+    <name>${project.artifactId}</name>
+    <description>统一指标门面（Micrometer）：BronyaMetrics 业务埋点工具 + @BizMetric 声明式埋点 + application 公共标签</description>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- 指标自动配置基础设施：提供 MeterRegistry 与 MeterRegistryCustomizer -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- AOP：@BizMetric 切面依赖 AspectJ 自动代理（Boot 4 中 aop starter 更名为 aspectj） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
+        </dependency>
+
+        <!--
+            Micrometer 核心（Metrics / Timer / Tags）由 spring-boot-starter-actuator 传递引入。
+            micrometer-registry-prometheus 不由本 starter 引入，使用方（web / monitor starter）
+            按需引入后即可通过 /actuator/prometheus 暴露指标，被 Prometheus 抓取、Grafana 展示。
+        -->
+    </dependencies>
+
+</project>
