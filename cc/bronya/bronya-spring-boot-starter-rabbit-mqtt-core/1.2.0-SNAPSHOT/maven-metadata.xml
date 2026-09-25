@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>cc.bronya</groupId>
+  <artifactId>bronya-spring-boot-starter-rabbit-mqtt-core</artifactId>
+  <versioning>
+    <lastUpdated>20260807175027</lastUpdated>
+    <snapshot>
+      <timestamp>20260807.175027</timestamp>
+      <buildNumber>36</buildNumber>
+    </snapshot>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.2.0-20260807.175027-36</value>
+        <updated>20260807175027</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.2.0-20260807.175027-36</value>
+        <updated>20260807175027</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+  <version>1.2.0-SNAPSHOT</version>
+</metadata>

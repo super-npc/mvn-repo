@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud-framework</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bronya-cloud-spring-boot-starter-monitor</artifactId>
+    <name>${project.artifactId}</name>
+    <description>可观测性自动配置：链路追踪(SkyWalking -javaagent，无需应用代码介入)、指标、@BizTrace 业务埋点</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-common</artifactId>
+        </dependency>
+
+        <!-- Actuator：提供 tracing / metrics 自动配置的基础设施 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Spring Boot 4 链路追踪自动配置（OTel 桥接）。
+             传递引入 spring-boot-micrometer-tracing / spring-boot-opentelemetry 两个 autoconfig 模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-micrometer-tracing-opentelemetry</artifactId>
+        </dependency>
+        <!-- Micrometer↔OpenTelemetry 桥接实现 -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+        <!-- 链路追踪由 SkyWalking -javaagent 接管（gRPC→OAP 11800），不再通过 Zipkin 通道导出 -->
+
+        <!-- AOP：@BizTrace 业务链路埋点（Boot 4 中 aop starter 更名为 aspectj） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
+        </dependency>
+
+        <!-- 仅 TraceFilter 使用，设为 provided：网关(WebFlux)不需要 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Micrometer 对 Prometheus 的支持（可选，classpath 存在即生效） -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

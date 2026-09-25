@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bc-framework</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bc-spring-boot-starter-rpc</artifactId>
+    <name>${project.artifactId}</name>
+    <description>OpenFeign 自动配置：OkHttp 客户端、负载均衡、签名拦截器、鉴权头透传、统一错误解码、降级基类（合并原 openfeign 模块）</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-common</artifactId>
+        </dependency>
+        <!-- 原 openfeign 模块的 transport 层依赖 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-shared</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-web</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <!-- 注意：这里**不能**引 spring-cloud-starter-bootstrap。
+             它会让 Spring Cloud 走 LegacyContextRefresher（依赖老的 bootstrap PropertySource 机制），
+             而 Legacy 实现不会重跑 ConfigData ⇒ 改 Nacos 配置后热刷新静默失效（编译通过、启动正常、就是不生效）。
+             判据见 spring-cloud-context 的 RefreshAutoConfiguration：
+               @ConditionalOnBootstrapDisabled → ConfigDataContextRefresher（我们要的）
+               @ConditionalOnBootstrapEnabled  → LegacyContextRefresher（要避免的） -->
+        <!-- Nacos 注册发现 + 配置中心（自研 starter，平替 spring-cloud-alibaba；
+             只依赖 nacos-client 与 Spring 契约，不引入任何 com.alibaba.cloud 组件） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-nacos</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

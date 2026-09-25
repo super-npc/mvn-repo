@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-example</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>示例：演示/测试服务（用于验证网关、鉴权、跨服务调用与 nacos-config/rabbit/mcp 等中间件能力），
+        仅本地/日常验证使用，不参与生产 docker 部署</description>
+
+    <modules>
+        <module>bc-example-api</module>
+        <module>bc-example-server</module>
+    </modules>
+
+</project>

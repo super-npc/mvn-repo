@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-cache</artifactId>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- 缓存抽象：CacheManager / @Cacheable 基础设施由 Spring Boot 提供 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <!-- 配置元数据处理器：为 bronya.cache.* 生成 IDE 提示与文档 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- 本地缓存（可选）：classpath 存在 Caffeine 时提供本地兜底；缺失则完全不接管 -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Redis 缓存后端已移除（2026-09-20）：缓存统一由 PG（pgcache）平替，
+             不再引入 redisson / redisson-spring-cache，避免上游被迫连 Redis -->
+
+        <!-- PG 缓存核心（默认后端）：随本 starter 传递，AUTO 模式下优先使用 PG 缓存。
+             pgcache-core 仅依赖 cache + amis-api + 数据库驱动，不引入 plus，无循环依赖 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-pgcache-core</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

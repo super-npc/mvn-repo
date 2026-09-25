@@ -1,0 +1,1414 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cc.bronya</groupId>
+    <artifactId>bronya-parent</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <bronya.version>1.2.0-SNAPSHOT</bronya.version>
+        <bronya-cloud.version>1.0-SNAPSHOT</bronya-cloud.version>
+
+        <!-- Project Settings -->
+        <java.version>25</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.args>--enable-preview</maven.compiler.args>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <resource.delimiter>@</resource.delimiter>
+
+        <!-- Spring Ecosystem -->
+        <spring-boot.version>4.1.1</spring-boot.version>
+        <commons-compress.version>1.28.0</commons-compress.version>
+        <spring-boot-admin.version>4.1.2</spring-boot-admin.version>
+        <spring-modulith.version>2.0.8</spring-modulith.version>
+        <spring-ai.version>2.0.1</spring-ai.version>
+        <spring-ai-alibaba.version>1.1.0.0</spring-ai-alibaba.version>
+        <spring-statemachine.version>4.0.2</spring-statemachine.version>
+        <springdoc.version>3.1.0</springdoc.version>
+
+        <!-- Database & ORM -->
+        <druid.version>1.2.28</druid.version>
+        <mybatis-plus-ext.version>3.5.17-EXT1005</mybatis-plus-ext.version>
+        <mybatis-flex.version>1.11.8</mybatis-flex.version>
+<!--        <jsqlparser.version>5.3</jsqlparser.version>-->
+        <jsqlparser.version>4.9</jsqlparser.version>
+        <dynamic-datasource.version>4.5.0</dynamic-datasource.version>
+        <p6spy.version>3.9.1</p6spy.version>
+        <p6spy-spring-boot-starter.version>2.0.1</p6spy-spring-boot-starter.version>
+        <binlog4j.version>1.9.1</binlog4j.version>
+
+        <!-- HTTP / RPC -->
+        <okhttp.version>4.12.0</okhttp.version>
+        <okio.version>3.18.1</okio.version>
+        <retrofit.version>3.0.0</retrofit.version>
+        <retrofit2-adapter.version>3.0.0</retrofit2-adapter.version>
+        <okhttps.version>5.0.0</okhttps.version>
+        <java-websocket.version>1.6.0</java-websocket.version>
+        <!-- 阿里云 DashScope（CosyVoice TTS / 语音克隆，bronya-shared AliVoice 客户端） -->
+        <dashscope.version>2.22.30</dashscope.version>
+
+        <!-- Utils -->
+        <lombok.version>1.18.46</lombok.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <hutool.version>5.8.47</hutool.version>
+        <hutool.v7.version>7.0.0-M5</hutool.v7.version>
+        <!-- 必须 >= 2.0.64：低版本 JSONReaderUTF16.readString 复用 strBuf 时缺容量判断，
+             解析「含多个转义字符串且后者转义前缀更长」的文档会抛 ArrayIndexOutOfBoundsException。
+             （旧注释「native 编译有问题,退版本」：全仓无 native-image 配置，2026-09-02 确认后升级） -->
+        <fastjson.version>2.0.64</fastjson.version>
+        <guava.version>33.7.1-jre</guava.version>
+        <vavr.version>1.0.1</vavr.version>
+        <beetl.version>3.21.2.RELEASE</beetl.version>
+        <jodd.version>6.3.0</jodd.version>
+        <jodd-lagarto.version>6.0.6</jodd-lagarto.version>
+        <cola.version>5.0.0</cola.version>
+        <ttl.version>2.14.5</ttl.version>
+        <commonmark.version>0.30.0</commonmark.version>
+        <bouncycastle.version>1.85.2</bouncycastle.version>
+        <java-markdown-generator.version>1.3.2</java-markdown-generator.version>
+        <atlas-chain.version>0.1.1</atlas-chain.version>
+        <datafaker.version>2.7.0</datafaker.version>
+        <tika.version>4.0.0</tika.version>
+        <tinypinyin.version>2.0.3.RELEASE</tinypinyin.version>
+        <metadata-extractor.version>2.21.0</metadata-extractor.version>
+        <oshi.version>7.5.0</oshi.version>
+        <dnsjava.version>3.6.5</dnsjava.version>
+        <mica-auto.version>4.0.1</mica-auto.version>
+        <image-combiner.version>2.6.9</image-combiner.version>
+        <plantuml.version>8059</plantuml.version>
+        <jsch.version>2.28.7</jsch.version>
+
+        <!-- Media / Storage -->
+        <commons-io.version>2.22.0</commons-io.version>
+        <x-file-storage.version>2.3.0</x-file-storage.version>
+        <webp-imageio.version>0.1.3</webp-imageio.version>
+        <cos.version>5.6.275</cos.version>
+        <awssdk.version>2.54.2</awssdk.version>
+
+        <!-- Security & Auth -->
+        <sa-token.version>1.46.0</sa-token.version>
+        <!-- 配置项加解密已由自研的 bronya-sb-starter-crypto 承担（纯 JDK 实现，与 jasypt 密文逐字节兼容），
+             本项目不再引入任何 jasypt 依赖（jasypt / jasypt-spring-boot-starter 的版本属性已移除） -->
+
+        <!-- Cache & MQ -->
+        <redisson.version>4.7.0</redisson.version>
+
+        <!-- Monitoring & Ops -->
+        <slf4j.version>2.0.18</slf4j.version>
+        <prometheus.version>0.16.0</prometheus.version>
+        <!-- Workflow / Rules -->
+        <easy-rules.version>4.1.0</easy-rules.version>
+        <mvel.version>2.5.2.Final</mvel.version>
+        <liteflow.version>2.16.1</liteflow.version>
+        <togglz.version>4.4.0</togglz.version>
+
+        <!-- API Doc -->
+        <swagger.version>2.2.54</swagger.version>
+        <knife4j.version>5.3.3</knife4j.version>
+
+        <!-- SkyWalking（日志 %tid / traceId 读取统一版本，与本地 agent 9.6.0 对齐）。
+             注意：9.7.0 的 toolkit 已发布 Central，但父 POM java-agent:9.7.0 未同步（中央仓库 404，最高 9.6.0），
+             依赖解析会断链，故锁定 9.6.0；待官方补发后再升级。 -->
+        <skywalking.version>9.6.0</skywalking.version>
+
+        <!-- AI / OCR -->
+        <!-- AgentScope 智能体框架：BOM 统一管理 io.agentscope 全家桶（harness / model 扩展 / sandbox 等） -->
+        <agentscope.version>2.0.3</agentscope.version>
+        <langchain4j.version>1.12.1</langchain4j.version>
+        <langchain4j-community.version>1.12.0-beta20-SNAPSHOT</langchain4j-community.version>
+        <smartjavaai.version>1.0.15</smartjavaai.version>
+        <rapidocr.version>0.0.7</rapidocr.version>
+
+        <!-- WeChat / Telegram -->
+        <!-- WxJava（微信开发 Java SDK）：版本由 wx-java-bom 单点收口（见 dependencyManagement 的 import），
+             覆盖 weixin-java-common/miniapp/mp/pay/open/cp/channel/store/aispeech 及全部 wx-java-*-spring-boot-starter。
+             子模块（bronya-cloud/modules/bc-wx、furina/furina-project-wx）声明依赖不写 <version>；
+             某个模块要偏离统一版本时，只在该模块自己的 dependencyManagement 里单点覆盖坐标版本即可。 -->
+        <wx-java.version>4.8.6-20260913.153551</wx-java.version>
+        <telegrambots.version>10.2.1</telegrambots.version>
+
+        <!-- Manifold / Vaadin -->
+        <manifold-version>2026.1.6</manifold-version>
+        <vaadin.version>24.4.6</vaadin.version>
+
+        <!-- Codegen -->
+        <auto-service.version>1.1.1</auto-service.version>
+        <javapoet.version>1.13.0</javapoet.version>
+
+        <!-- Test -->
+        <testcontainers.version>1.21.3</testcontainers.version>
+
+        <!-- Maven Plugins -->
+        <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
+        <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
+        <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
+        <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
+        <git-commit-id-plugin.version>9.0.2</git-commit-id-plugin.version>
+        <jib.version>3.5.1</jib.version>
+        <central-publishing-maven-plugin.version>0.10.0</central-publishing-maven-plugin.version>
+
+        <!-- Sonar -->
+        <sonar.inclusions>**/*.java,**/*.xml</sonar.inclusions>
+        <sonar.exclusions>node_modules/**/*,.idea/**/*,.vscode/**/*,**/src/main/resources,**/src/test/**</sonar.exclusions>
+
+        <!-- ========== 子仓库统一版本（2026-08-24 收敛自 bronya / bronya-cloud 各子 pom 硬编码） ========== -->
+        <annotations.version>24.0.1</annotations.version>
+        <hypersistence-utils.version>3.15.2</hypersistence-utils.version>
+        <shardingsphere.version>5.4.1</shardingsphere.version>
+        <mybatis-spring-boot.version>3.0.5</mybatis-spring-boot.version>
+        <nacos.version>2.5.4</nacos.version>
+        <!-- javassist：rocketmq -> reflections 传递依赖，原 3.21.0-GA 的 POM 在 Central 已损坏，钉到 3.30.2-GA -->
+        <javassist.version>3.30.2-GA</javassist.version>
+        <tianai-captcha.version>1.5.3</tianai-captcha.version>
+        <sshj.version>0.40.0</sshj.version>
+        <jfinal-enjoy.version>5.2.2</jfinal-enjoy.version>
+        <pgmq-jdbc-client.version>1.0.0</pgmq-jdbc-client.version>
+        <paho-mqttv5.version>1.2.5</paho-mqttv5.version>
+        <rocketmq-client.version>5.4.0</rocketmq-client.version>
+        <rocketmq-client-apis.version>5.2.0</rocketmq-client-apis.version>
+        <!-- Spring Cloud（bronya-cloud 专属 BOM，版本值统一在此定义，BOM import 保留在 bronya-cloud） -->
+        <spring-cloud.version>2025.1.3</spring-cloud.version>
+        <!-- spring-ai-alibaba-bom(1.1.0.0) 未管理 mcp-registry/mcp-distributed，单独钉版（与 Boot 4.0.x / Spring AI 2.0.0-Mx 配套） -->
+        <spring-ai-alibaba-mcp.version>2.0.0-M1.1</spring-ai-alibaba-mcp.version>
+        <!-- bronya-generate 仓库产物（bronya-cloud 测试期代码生成依赖） -->
+        <bronya-generate.version>1.0-SNAPSHOT</bronya-generate.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+            <!-- 关 snapshots：Maven 超级 POM 的 central 本来就是 <enabled>false</enabled>，
+                 为了显式写地址而重复声明却不写 <snapshots>，反而翻成默认 true
+                 ⇒ 每个 cc.bronya *-SNAPSHOT 解析都白问一次 Central（Central 不提供 snapshot）。
+                 补回 false 即回到 Maven 默认语义。 -->
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <!-- ★id 从 github 改成 mvn-repo★：原先 pom 用 id=github、settings.xml 的 github profile 用
+                 id=mvn-repo，**两个 id 指同一个仓库**（super-npc/mvn-repo）⇒ 每个制品被多探一次，
+                 而且「哪个 id 生效」不可预测。现统一为 mvn-repo，并与 settings 那份保持
+                 id/url/开关【逐字一致】，两者合并即恒等。
+                 注：settings 里名为 github 的是【profile id】，与仓库 id 是两个命名空间，不冲突。 -->
+            <id>mvn-repo</id>
+            <url>https://raw.githubusercontent.com/super-npc/mvn-repo/main/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <!-- 项目无 Spring 官方 SNAPSHOT 依赖（spring-boot 4.0.7 / spring-ai 2.0.0-M4 均为 release/milestone），
+                 显式禁用 snapshots：否则每个 cc.bronya *-SNAPSHOT 依赖解析时都会向 repo.spring.io 请求
+                 maven-metadata.xml，网络不通时白等 Connect timed out，拖慢/污染每次构建 -->
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <name>Central Portal Snapshots</name>
+            <id>central-portal-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <!-- 项目无第三方 sonatype SNAPSHOT 依赖，显式禁用 snapshots，避免自研 *-SNAPSHOT 解析时多余请求 -->
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+            <!-- 显式禁用 snapshots：本仓无「第三方 *-SNAPSHOT」依赖（所有 SNAPSHOT 版本都是本仓自己的
+                 cc.bronya:* 模块），而 jitpack 默认 snapshots enabled ⇒ 每个自研 SNAPSHOT 解析都要向
+                 jitpack.io 请求 maven-metadata.xml 白撞一次（实测 404 但耗时 ~1.9s）。
+                 ★只关 snapshots，不动 release★：jitpack 正常的 Tag 制品（release）照常解析。 -->
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>clojars</id>
+            <url>https://repo.clojars.org</url>
+            <!-- 同上：本仓无 clojars 坐标，关掉 snapshots 避免每次解析自研 SNAPSHOT 时白撞（实测 404/~1.6s） -->
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <!-- provided 作用域：仅编译期可用，不参与打包 -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jodd</groupId>
+            <artifactId>jodd-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool.v7</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ibeetl</groupId>
+            <artifactId>beetl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-models</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cola</groupId>
+            <artifactId>cola-component-exception</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.dromara.mpe</groupId>
+            <artifactId>mybatis-plus-ext-autofill-annotation</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <!-- https://www.datafaker.net/documentation/usage/ -->
+                <groupId>net.datafaker</groupId>
+                <artifactId>datafaker</artifactId>
+                <version>${datafaker.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool.v7</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.v7.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-mapstruct-binding</artifactId>
+                <version>${lombok-mapstruct-binding.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jodd</groupId>
+                <artifactId>jodd-util</artifactId>
+                <version>${jodd.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ibeetl</groupId>
+                <artifactId>beetl</artifactId>
+                <version>${beetl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.vavr</groupId>
+                <artifactId>vavr</artifactId>
+                <version>${vavr.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <!-- Bronya modules management - keeping them here so projects extending this know about bronya versions -->
+            <!-- Actually, if olive extends this, it inherits these managed versions. -->
+            
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-common</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+                        <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-amis-api</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-pgcache-core</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+<dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-web</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-cache</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-monitor</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-plus</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-swagger</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-rabbit</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-rocket</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-media</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-forwarder</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-notice</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-plantuml</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-admin</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-security-core</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-member</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-proxy</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-ssh</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-shell</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-scheduled</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            
+            
+            
+            
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-shared</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-processor</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-quick-login</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+
+            <!-- ========== bronya-cloud 模块（版本由 cloud 仓库独立管理） ========== -->
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-spring-boot-starter-rpc</artifactId>
+                <version>${bronya-cloud.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-framework</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-pgmq</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-pgcache</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-pgcache-redis-server</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-crypto</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-rule</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+            <!-- Nacos 原生集成（平替 spring-cloud-alibaba 的 nacos-discovery / nacos-config）：
+                 只依赖 nacos-client 与 Spring 契约，不引入任何 com.alibaba.cloud 组件 -->
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-sb-starter-nacos</artifactId>
+                <version>${bronya.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>logging-interceptor</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>adapter-rxjava</artifactId>
+                <version>${retrofit2-adapter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>converter-scalars</artifactId>
+                <version>${retrofit2-adapter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.Steppschuh</groupId>
+                <artifactId>Java-Markdown-Generator</artifactId>
+                <version>${java-markdown-generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient</artifactId>
+                <version>${prometheus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient_httpserver</artifactId>
+                <version>${prometheus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient_hotspot</artifactId>
+                <version>${prometheus.version}</version>
+            </dependency>
+            <!--
+                hutool 5 的「模块化制品」必须同版本：全仓已经用 ${hutool.version} 的 hutool-all / hutool-crypto，
+                但传递依赖会把其它模块按各自的旧版本带进来（nearest-wins，版本号小的反而可能胜出），
+                于是出现「新调用方 + 旧被调方」⇒ 运行期 NoSuchMethodError。已踩过的实例：
+                x-file-storage-core:2.3.0 带 hutool-core:5.8.28（该类里 NumberWithFormat 还没有 getNumber()），
+                而 sa-token-jwt → hutool-jwt:5.8.36 → hutool-json:5.8.36 会调用 NumberWithFormat.getNumber(),
+                结果登录时 JWT 签发直接 NoSuchMethodError。
+                ⇒ 统一钉到 ${hutool.version}（**就是最大那个版本**）：版本更旧的一方都在调用方，钉高不会让它们找不到方法。
+            -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-crypto</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.nemoob</groupId>
+                <artifactId>atlas-chain-core</artifactId>
+                <version>${atlas-chain.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>${jsqlparser.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot4-starter</artifactId>
+                <version>${dynamic-datasource.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.gavlyukovskiy</groupId>
+                <artifactId>p6spy-spring-boot-starter</artifactId>
+                <version>${p6spy-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mybatis-flex</groupId>
+                <artifactId>mybatis-flex-core</artifactId>
+                <version>${mybatis-flex.version}</version>
+            </dependency>
+            <!-- 阿里云 DashScope（CosyVoice TTS；victools 排除等按使用方决策，放各子 pom） -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dashscope-sdk-java</artifactId>
+                <version>${dashscope.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.java-websocket</groupId>
+                <artifactId>Java-WebSocket</artifactId>
+                <version>${java-websocket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.commonmark</groupId>
+                <artifactId>commonmark</artifactId>
+                <version>${commonmark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jodd</groupId>
+                <artifactId>jodd-http</artifactId>
+                <version>${jodd.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jodd</groupId>
+                <artifactId>jodd-lagarto</artifactId>
+                <version>${jodd-lagarto.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.biezhi</groupId>
+                <artifactId>TinyPinyin</artifactId>
+                <version>${tinypinyin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-core</artifactId>
+                <version>${tika.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-parsers-standard-package</artifactId>
+                <version>${tika.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.drewnoakes</groupId>
+                <artifactId>metadata-extractor</artifactId>
+                <version>${metadata-extractor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.statemachine</groupId>
+                <artifactId>spring-statemachine-starter</artifactId>
+                <version>${spring-statemachine.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.auto.service</groupId>
+                <artifactId>auto-service</artifactId>
+                <version>${auto-service.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup</groupId>
+                <artifactId>javapoet</artifactId>
+                <version>${javapoet.version}</version>
+            </dependency>
+            <!-- netty 交由 spring-boot-dependencies(4.0.8) 统一管理；原 netty-all 5.0.0.Alpha2 为预发布且与 Boot 自带 netty 4.2.x 冲突，已移除 -->
+            <dependency>
+                <groupId>cn.zhxu</groupId>
+                <artifactId>okhttps</artifactId>
+                <version>${okhttps.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.zhxu</groupId>
+                <artifactId>okhttps-gson</artifactId>
+                <version>${okhttps.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-rules-core</artifactId>
+                <version>${easy-rules.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-rules-support</artifactId>
+                <version>${easy-rules.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-rules-mvel</artifactId>
+                <version>${easy-rules.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yomahub</groupId>
+                <artifactId>liteflow-spring-boot-starter</artifactId>
+                <version>${liteflow.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dnsjava</groupId>
+                <artifactId>dnsjava</artifactId>
+                <version>${dnsjava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-build</artifactId>
+                <version>${spring-boot-admin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>retrofit</artifactId>
+                <version>${retrofit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>converter-gson</artifactId>
+                <version>${retrofit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okio</groupId>
+                <artifactId>okio</artifactId>
+                <version>${okio.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.sourceforge.plantuml</groupId>
+                <artifactId>plantuml</artifactId>
+                <version>${plantuml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${ttl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cola</groupId>
+                <artifactId>cola-component-extension-starter</artifactId>
+                <version>${cola.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cola</groupId>
+                <artifactId>cola-component-statemachine</artifactId>
+                <version>${cola.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cola</groupId>
+                <artifactId>cola-component-exception</artifactId>
+                <version>${cola.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cola</groupId>
+                <artifactId>cola-component-catchlog-starter</artifactId>
+                <version>${cola.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-cache</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>p6spy</groupId>
+                <artifactId>p6spy</artifactId>
+                <version>${p6spy.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot4-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-quick-login</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-core</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-jwt</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+
+            <!-- ★内嵌 Web 容器：本脚手架全量统一为 Jetty★
+                 决策点【不在本文件】，而在提供 web 能力的两个 starter：
+                   · bronya      → bronya-starter/bronya-sb-starter-web
+                   · bronya-cloud → bc-framework/bc-spring-boot-starter-web
+                 二者都排除 spring-boot-starter-tomcat 并引入 spring-boot-starter-jetty，
+                 所以业务/上游模块【不需要】声明任何容器依赖，只要用
+                 bronya-sb-starter-plus / -web 就自动跑在 Jetty 上。
+
+                 ⚠️ 业务模块【不要】再直接声明 spring-boot-starter-web：
+                    · Boot 4 起该坐标已废弃（官方指向 spring-boot-starter-webmvc）；
+                    · 它会重新把 spring-boot-starter-tomcat 带回 classpath，而 Boot 择取内嵌容器的
+                      优先级是 Tomcat > Jetty > Undertow ⇒ Tomcat 在场时 Jetty 被**静默忽略**。
+
+                 ⚠️ 这里刻意【不】加 DM 级 exclusion（不在 dependencyManagement 里摘 Tomcat）：
+                    本父 POM 被 olive / furina / fmz-app / bronya-generate 共同继承，其中
+                    furina-app-wechat 直接声明 spring-boot-starter-web 且不依赖任何 bronya web starter，
+                    若在 DM 层摘掉 Tomcat，它会变成"没有 Servlet 容器"而启动失败。
+                    容器决策因此收敛在 starter 层（谁用 web starter 谁得到 Jetty），爆炸半径=0。 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${commons-compress.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>systems.manifold</groupId>
+                <artifactId>manifold-ext-rt</artifactId>
+                <version>${manifold-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>systems.manifold</groupId>
+                <artifactId>manifold-delegation-rt</artifactId>
+                <version>${manifold-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>systems.manifold</groupId>
+                <artifactId>manifold-json-rt</artifactId>
+                <version>${manifold-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>systems.manifold</groupId>
+                <artifactId>manifold-templates-rt</artifactId>
+                <version>${manifold-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>systems.manifold</groupId>
+                <artifactId>manifold-tuple-rt</artifactId>
+                <version>${manifold-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mvel</groupId>
+                <artifactId>mvel2</artifactId>
+                <version>${mvel.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.mwiede</groupId>
+                <artifactId>jsch</artifactId>
+                <version>${jsch.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.mymonstercat</groupId>
+                <artifactId>rapidocr</artifactId>
+                <version>${rapidocr.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.mymonstercat</groupId>
+                <artifactId>rapidocr-ncnn-platform</artifactId>
+                <version>${rapidocr.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.mymonstercat</groupId>
+                <artifactId>rapidocr-onnx-platform</artifactId>
+                <version>${rapidocr.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.freewayso</groupId>
+                <artifactId>image-combiner</artifactId>
+                <version>${image-combiner.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.dreamlu</groupId>
+                <artifactId>mica-auto</artifactId>
+                <version>${mica-auto.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baizhukui</groupId>
+                <artifactId>knife4j-openapi3-boot4-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
+            <!-- SkyWalking Toolkit：版本统一（与本地 agent ${skywalking.version} 对齐） -->
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-trace</artifactId>
+                <version>${skywalking.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-logback-1.x</artifactId>
+                <version>${skywalking.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.dromara.mpe</groupId>
+                <artifactId>mybatis-plus-ext-spring-boot4-starter</artifactId>
+                <version>${mybatis-plus-ext.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dromara.mpe</groupId>
+                <artifactId>mybatis-plus-ext-annotation</artifactId>
+                <version>${mybatis-plus-ext.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.dromara.mpe</groupId>
+                <artifactId>mybatis-plus-ext-base</artifactId>
+                <version>${mybatis-plus-ext.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dromara.mpe</groupId>
+                <artifactId>mybatis-plus-ext-autofill-annotation</artifactId>
+                <version>${mybatis-plus-ext.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.telegram</groupId>
+                <artifactId>telegrambots-longpolling</artifactId>
+                <version>${telegrambots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.telegram</groupId>
+                <artifactId>telegrambots-client</artifactId>
+                <version>${telegrambots.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.smartjavaai</groupId>
+                <artifactId>smartjavaai-bom</artifactId>
+                <version>${smartjavaai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-bom</artifactId>
+                <version>${spring-modulith.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-bom</artifactId>
+                <version>${spring-ai-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- AgentScope BOM：io.agentscope 全家桶版本统一（harness / model 扩展 / sandbox / starter 等） -->
+            <dependency>
+                <groupId>io.agentscope</groupId>
+                <artifactId>agentscope-bom</artifactId>
+                <version>${agentscope.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <artifactId>togglz-project</artifactId>
+                <groupId>org.togglz</groupId>
+                <version>${togglz.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp-bom</artifactId>
+                <version>${okhttp.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- WxJava BOM：com.github.binarywang 全家桶版本单点收口
+                 （weixin-java-* 核心模块 + wx-java-*-spring-boot-starter，版本值见 properties 的 wx-java.version）。
+                 全仓唯一声明处：bronya-cloud/modules/bc-wx 与 furina/furina-project-wx 均只写坐标不写版本。 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>wx-java-bom</artifactId>
+                <version>${wx-java.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- ========== Media / Storage（bronya-sb-starter-media 使用） ========== -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <!-- x-file-storage: 存储平台,不使用 springboot 配置 -->
+            <dependency>
+                <groupId>org.dromara.x-file-storage</groupId>
+                <artifactId>x-file-storage-core</artifactId>
+                <version>${x-file-storage.version}</version>
+            </dependency>
+            <!-- x-file-storage 已引入 thumbnailator, 加上 WebP 拓展支持 -->
+            <dependency>
+                <groupId>com.github.nintha</groupId>
+                <artifactId>webp-imageio-core</artifactId>
+                <version>${webp-imageio.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.qcloud</groupId>
+                <artifactId>cos_api</artifactId>
+                <version>${cos.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>s3</artifactId>
+                <version>${awssdk.version}</version>
+            </dependency>
+
+            <!-- ========== 子仓库统一版本（2026-08-24 收敛自 bronya / bronya-cloud 各子 pom 硬编码，版本值见上方 properties） ========== -->
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.hypersistence</groupId>
+                <artifactId>hypersistence-utils-hibernate-70</artifactId>
+                <version>${hypersistence-utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-client</artifactId>
+                <version>${nacos.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cloud.tianai.captcha</groupId>
+                <artifactId>tianai-captcha</artifactId>
+                <version>${tianai-captcha.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hierynomus</groupId>
+                <artifactId>sshj</artifactId>
+                <version>${sshj.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jfinal</groupId>
+                <artifactId>enjoy</artifactId>
+                <version>${jfinal-enjoy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.andreaesposito</groupId>
+                <artifactId>pgmq-jdbc-client</artifactId>
+                <version>${pgmq-jdbc-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.paho</groupId>
+                <artifactId>org.eclipse.paho.mqttv5.client</artifactId>
+                <version>${paho-mqttv5.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-client</artifactId>
+                <version>${rocketmq-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-client-apis</artifactId>
+                <version>${rocketmq-client-apis.version}</version>
+            </dependency>
+            <!-- spring-ai-alibaba MCP 组件（bronya-cloud 使用；父 BOM spring-ai-alibaba-bom 未管理，单独钉版） -->
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-starter-mcp-registry</artifactId>
+                <version>${spring-ai-alibaba-mcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-starter-mcp-distributed</artifactId>
+                <version>${spring-ai-alibaba-mcp.version}</version>
+            </dependency>
+            <!-- bronya-generate 仓库产物（bronya-cloud 测试期代码生成依赖） -->
+            <dependency>
+                <groupId>cc.bronya</groupId>
+                <artifactId>bronya-generate-core</artifactId>
+                <version>${bronya-generate.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+<!--                    <executions>-->
+<!--                        <execution>-->
+<!--                            <id>process-aot</id>-->
+<!--                            <goals>-->
+<!--                                <goal>process-aot</goal>-->
+<!--                            </goals>-->
+<!--                        </execution>-->
+<!--                    </executions>-->
+<!--                    <configuration>-->
+<!--                        <jvmArguments>&#45;&#45;enable-preview</jvmArguments>-->
+<!--                        <compilerArguments>&#45;&#45;enable-preview</compilerArguments>-->
+<!--                    </configuration>-->
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${maven-release-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${maven-gpg-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>${jib.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>${central-publishing-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>UTF8</encoding>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+                        <arg>--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+                    </compilerArgs>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                            <version>${spring-boot.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${versions-maven-plugin.version}</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <version>${git-commit-id-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git-project.properties
+                    </generateGitPropertiesFilename>
+                    <commitIdGenerationMode>full</commitIdGenerationMode>
+                    <offline>true</offline>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

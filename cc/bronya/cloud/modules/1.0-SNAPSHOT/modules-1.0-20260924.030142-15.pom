@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>modules</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>通用能力模块聚合（依赖库，非可部署应用）：apps 下的业务服务按需依赖，不单独部署</description>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <!-- 微信小程序能力库：卡片记账等业务 app 依赖它即获得「小程序 App 配置 / 用户 / 小程序码」能力 -->
+        <module>bc-wx</module>
+        <!-- OKX（欧易）V5 能力库：业务逻辑唯一一份、零 AI 注解；
+             被 bc-app-harness-plugin-fmz（AgentScope @Tool 壳）与 bc-app-pipeline-server（Spring AI @Tool 壳）复用 -->
+        <module>bc-okx</module>
+    </modules>
+
+</project>

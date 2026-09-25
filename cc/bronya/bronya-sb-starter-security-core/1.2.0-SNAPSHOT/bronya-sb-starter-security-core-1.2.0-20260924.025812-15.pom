@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>security</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- security 域依赖核心：组合注解合并装配 / 401-403 异常语义 / JWT 弱密钥启动校验。
+         starter-admin / starter-member 等"StpLogic 多账号体系"模块共同依赖；
+         starter-quick-login（filter 机制、非 StpLogic 体系）不依赖本模块。 -->
+    <artifactId>bronya-sb-starter-security-core</artifactId>
+    <description>security 域依赖核心小模块：sa-token 多体系公共基础设施（注解合并/异常处理/密钥校验）</description>
+
+    <dependencies>
+        <!-- sa-token 多体系基础：SaManager/SaAnnotationStrategy/授权异常类所在（sa-token-core + jakarta 集成）。
+             sa-token-jwt 无需引入：SaTokenConfig.getJwtSecretKey() 定义在 sa-token-core。 -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot4-starter</artifactId>
+        </dependency>
+
+        <!-- 提供 ResultVO（bronya-shared 传递）与 spring-webmvc（@RestControllerAdvice/@ExceptionHandler） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

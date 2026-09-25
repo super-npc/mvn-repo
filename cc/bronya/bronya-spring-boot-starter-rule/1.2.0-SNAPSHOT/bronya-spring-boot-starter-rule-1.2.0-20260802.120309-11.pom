@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-spring-boot-starter-rule</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--easy rules核心库（原 bronya-admin-rule 已折叠进本 starter）-->
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-rules-core</artifactId>
+        </dependency>
+        <!--规则定义文件格式，支持json,yaml等-->
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-rules-support</artifactId>
+        </dependency>
+        <!--支持mvel规则语法库-->
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-rules-mvel</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mvel2</artifactId>
+                    <groupId>org.mvel</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.mvel</groupId>
+            <artifactId>mvel2</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

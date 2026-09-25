@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-app-fmz</artifactId>
+    <name>${project.artifactId}</name>
+    <description>量化交易应用（2026-09-21 由独立仓库 fmz-app 迁入统一管理）：OKX 对冲策略 + 金十/非小号消息面分析 + Polymarket + 飞书播报 + 后台看板（端口 30011）</description>
+
+    <properties>
+        <!-- 开启 jib：mvn -Pjib package 会构建并推送 ${docker.registry}/bc-app-fmz。
+             ⚠️ 迁移契约（见 deploy-java.yml 与各 docker-compose.yml）：镜像名严格等于本 artifactId，
+                改名必须同步 docker/fmz/docker-compose.yml 的 image 字段，否则 CI 推新名、compose 拉旧名，
+                表现为「镜像不更新」。
+             ⚠️ 本模块不本地维护 jib 配置：from 镜像 / JVM flags / image 均取自根 pom 的 jib profile
+                （bronya-cloud 统一口径）；某应用要单独调 JVM，改它自己的 docker-compose.yml 的 JVM_BOOT_ARGS。 -->
+        <jib.skip>false</jib.skip>
+        <jib.main.class>cc.fmz.FmzApp</jib.main.class>
+    </properties>
+
+    <!-- ⚠️ 不在此导入 BOM：Spring Boot / Spring Cloud / Spring Cloud Alibaba / bronya 系的版本
+         全部由根 pom 的 dependencyManagement 统一管理（bronya-cloud → bronya-parent 链）。 -->
+    <dependencies>
+
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <!-- Arthas 在线诊断（tunnel-only，零配置；详见 docs/adr/ADR-0013-arthas-integration.md） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-quick-login</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-scheduled</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-notice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-pgmq</artifactId>
+        </dependency>
+
+        <!-- Spring Cloud Context：@RefreshScope 等注解。
+             注意：这里必须是 spring-cloud-context 而不是 spring-cloud-starter-bootstrap ——
+             后者会让 Spring Cloud 选用 LegacyContextRefresher（不重跑 ConfigData），
+             使 Nacos 配置热刷新静默失效。 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
+        </dependency>
+
+        <!-- Apache HttpClient 5：OpenAiConfig 自定义 RestClient 超时 -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+        </dependency>
+
+        <!-- WebSocket 客户端 -->
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 代码生成（GenCodeFmzAppTests 本地生成 amis/dashboard json 用）：
+             版本由 bronya-parent dependencyManagement 统一管理，不写 version。
+             ⚠️ CI 不走本测试（deploy-java.yml 全局 -Dmaven.test.skip=true），
+                而是由 deploy-java.yml ③-a 步用 bronya-generate-plugin 按 jib.main.class 自动生成。 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-generate-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
