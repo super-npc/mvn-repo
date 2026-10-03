@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-spring-boot-starter-swagger</artifactId>
+    <name>${project.artifactId}</name>
+    <description>文档 starter：统一 OpenAPI 元信息 + Knife4j(/doc.html) + springdoc(/v3/api-docs)，开箱即用零配置</description>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- 基础 web starter：提供 spring-boot-starter-web 等 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Swagger/OpenAPI 核心（springdoc，适配 Boot 4） -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+
+        <!-- Knife4j Next（Boot 4 维护分支，groupId 已切到 com.baizhukui）：/doc.html 增强 UI + 配置。
+             其内置 springdoc 即 3.0.3，与上方 springdoc 版本一致，无需排除。 -->
+        <dependency>
+            <groupId>com.baizhukui</groupId>
+            <artifactId>knife4j-openapi3-boot4-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Knife4jOpenApiCustomizer 用到的工具类 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-spring-boot-starter-media</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-plus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-arthas</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.18.0</version>
+        </dependency>
+        <dependency>
+            <!-- https://x-file-storage.xuyanwu.cn/ 存储平台,不使用springboot配置-->
+            <groupId>org.dromara.x-file-storage</groupId>
+            <artifactId>x-file-storage-core</artifactId>
+            <version>2.3.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hutool-core</artifactId>
+                    <groupId>cn.hutool</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- x-file-storage已引入thumbnailator, 加上 WebP 拓展支持 -->
+        <dependency>
+            <groupId>com.github.nintha</groupId>
+            <artifactId>webp-imageio-core</artifactId>
+            <version>0.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <version>5.6.259</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>2.41.1</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

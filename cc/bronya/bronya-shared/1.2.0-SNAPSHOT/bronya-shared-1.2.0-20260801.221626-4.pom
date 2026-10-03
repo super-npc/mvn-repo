@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-parent</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../bronya-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-shared</artifactId>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.alibaba.cola</groupId>
+            <artifactId>cola-component-catchlog-starter</artifactId>
+            <!-- 需要依赖 fastjson -->
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara.mpe</groupId>
+            <artifactId>mybatis-plus-ext-base</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15to18</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>adapter-rxjava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>retrofit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-scalars</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.Steppschuh</groupId>
+            <artifactId>Java-Markdown-Generator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_httpserver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_hotspot</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.nemoob</groupId>
+            <artifactId>atlas-chain-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-servlet</artifactId>
+        </dependency>
+
+        <!-- Jackson JSON（JsonUtils / HttpMessageConverterUtil，原 bronya-util 依赖） -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+
+        <!-- 日志（TraceLogCache 依赖 logback-classic 的 ILoggingEvent） -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
+        <!-- 加解密（JasyptUtil） -->
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+            <version>1.9.3</version>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- MyBatis-Flex（AmisField 注解依赖 SqlOperator，compile 传递供注解使用方解析） -->
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-core</artifactId>
+        </dependency>
+
+        <!-- 压缩工具（dashborad 组件 DTO 依赖 commons-compress） -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+        </dependency>
+
+        <!-- 自动建表注解（TableClassInfo 等依赖 mpe autotable） -->
+        <dependency>
+            <groupId>org.dromara.autotable</groupId>
+            <artifactId>auto-table-annotation</artifactId>
+        </dependency>
+
+        <!-- MyBatis-Plus Ext（TableClassInfo/BindMany2One 等依赖 mpe autotable/bind 注解，compile 传递） -->
+        <dependency>
+            <groupId>org.dromara.mpe</groupId>
+            <artifactId>mybatis-plus-ext-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara.mpe</groupId>
+            <artifactId>mybatis-plus-ext-autotable-annotation</artifactId>
+            <version>${mybatis-plus-ext.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara.mpe</groupId>
+            <artifactId>mybatis-plus-ext-bind-annotation</artifactId>
+            <version>${mybatis-plus-ext.version}</version>
+        </dependency>
+
+        <!-- ============ 原 bronya-third 依赖（第三方业务封装迁入） ============ -->
+        <!-- WebSocket（jin10/okex 行情订阅） -->
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+        </dependency>
+        <!-- Telegram Bot -->
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-longpolling</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-client</artifactId>
+        </dependency>
+        <!-- md 转 html -->
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+        </dependency>
+        <!-- 爬虫/网页解析 -->
+        <dependency>
+            <groupId>org.jodd</groupId>
+            <artifactId>jodd-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jodd</groupId>
+            <artifactId>jodd-lagarto</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

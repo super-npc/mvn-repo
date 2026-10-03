@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-app-harness</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>AI 智能体微服务（AgentScope + Spring Cloud，提供 Feign 契约与 REST 服务）</description>
+
+    <properties>
+        <!-- 默认排除的测试组（@Tag）：integration = 真实调用 LLM 的用例（需外部注入密钥）。
+             要跑这些用例：mvn test -Dharness.excludedGroups=none -Dgroups=integration
+             （POM 里显式配置优先于 -D，故用属性占位实现可覆盖） -->
+        <harness.excludedGroups>integration</harness.excludedGroups>
+
+        <!-- victools JSON Schema 生成器的钉版（本服务装的是 agentscope，必须避开 Jackson 3 血统那一版）。
+             取值 = agentscope-core 编译期依赖的那一版（2.0.3 → 4.38.0，Jackson 2 世代）。
+             ⚠️ 2026-09-16 流水线已迁出为独立微服务 bc-app-pipeline-server（那侧用 Spring AI，
+                且刻意不再排除 victools）—— 本服务里 spring-ai 已彻底消失，
+                本钉版的作用从「消解 agentscope × Spring AI 的共存冲突」变为
+                「防止任何传递依赖把 victools 5.x 带回来，把 agentscope 打挂」的护栏。
+             ⚠️ 升级 agentscope 时必须同步核对本值（agentscope 换到 Jackson 3 血统的那天，本钉版可删）。 -->
+        <victools.version>4.38.0</victools.version>
+    </properties>
+
+    <modules>
+        <module>bc-app-harness-api</module>
+        <module>bc-app-harness-core</module>
+        <module>bc-app-harness-server-single</module>
+        <module>bc-app-harness-server-team</module>
+        <module>bc-app-harness-plugin</module>
+        <module>bc-app-harness-server-app</module>
+    </modules>
+
+    <!-- victools jsonschema 钉版（护栏，勿删）：
+         本服务装着 agentscope，它编译期锁定 victools 4.38.0（Jackson 2 世代）；
+         而 Jackson 3 血统的 victools 5.x 与它「方法名与参数相同、只有返回类型不同」，
+         同名类在同一个 classpath 上只能加载一份，混入 5.x = agentscope 注册工具时
+         NoSuchMethodError，且要到启动期才暴露。
+
+         历史：这条钉版原先消解的是「agentscope × Spring AI 共存冲突」——
+         Spring AI 要 5.0.0、agentscope 要 4.38.0，两者当年同处 server-app 的 classpath。
+         2026-09-16 流水线（Spring AI 的唯一使用方）迁出为 bc-app-pipeline-server 后，
+         本服务已无 Spring AI；钉版保留为护栏：防止任何新增/传递依赖把 5.x 带回来。
+
+         为什么钉在聚合 pom 的 dependencyManagement 而不是逐个 dependency 写 exclusion：
+         exclusion 只在「声明它的那一条依赖」上生效，任何一个新加的制品都可能重新把它传进来、
+         且不报错，直到应用启动才崩。dependencyManagement 对全部子模块的传递依赖生效，
+         是这类「同名不同版」问题唯一不会随依赖增减而失效的保障。 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.victools</groupId>
+                <artifactId>jsonschema-generator</artifactId>
+                <version>${victools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.victools</groupId>
+                <artifactId>jsonschema-module-jackson</artifactId>
+                <version>${victools.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.victools</groupId>
+                <artifactId>jsonschema-module-swagger-2</artifactId>
+                <version>${victools.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!-- 默认构建不打联网用例：@Tag("integration") 的用例会真实调用 LLM，
+                 无凭据（或凭据失效）时 401 直接红构建。需要时显式 mvn test -Dgroups=integration。
+                 密钥一律外部注入（AGENT_OPENAI_API_KEY / -Dagent.openai.api.key），禁止硬编码进仓库。 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludedGroups>${harness.excludedGroups}</excludedGroups>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

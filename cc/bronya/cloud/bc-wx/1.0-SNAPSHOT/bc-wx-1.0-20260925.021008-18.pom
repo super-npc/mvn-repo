@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-wx</artifactId>
+    <name>${project.artifactId}</name>
+    <description>
+        微信小程序能力库（依赖库，非可部署应用）：小程序 App 配置 / 小程序用户 / 小程序码生成。
+        业务 app 依赖本模块即获得这些能力（in-process 调用，无独立服务、无 Feign 跳转）；
+        wx_app / wx_user 两张表由宿主 app 的 AutoTable 建在其自己的库中。
+    </description>
+
+    <dependencies>
+        <!-- ServiceException / CoreErrorCode：错误码与统一异常口径 -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-common</artifactId>
+        </dependency>
+        <!-- 宿主 app 一律已引入 starter-plus：实体基类 / Amis 注解 / AutoTable 注解 / MP Repository /
+             AmisEnum 等能力全部由它传递，本模块不额外引入 starter-web（不接管宿主的 Web 层） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <!-- 注意：本模块**不依赖** bronya-sb-starter-media（2026-09-25 起）。
+             小程序码走微信云托管云调用 API（tcb/uploadfile，见 WxCloudStorageClient）直落云托管对象存储，
+             既不需要 COS 密钥，也不需要媒体 starter 的 COS/MinIO 平台注册；宿主因此不必再配
+             bronya.storage.*（尤其是不再需要 bronya.storage.miniapp 的密钥）。 -->
+        <!-- 微信小程序 SDK（WxJava）：access_token 维护 + getwxacodeunlimit。
+             版本由 bronya-parent 导入的 wx-java-bom 统一收口，本模块只声明坐标不写 <version> -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+        </dependency>
+        <!-- Jakarta Bean Validation 注解（@NotBlank / @Size / @Pattern）：C 端公共请求 VO 的声明式校验用；
+             注解实现（hibernate-validator）由宿主的 spring-boot-starter-validation 提供，此处只声明注解 API -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        <!-- 统一可观测性 starter：wx 公共接口（登录/用户/小程序码）的业务埋点经 BronyaMetrics 上报，
+             随宿主服务的 /actuator/prometheus 被抓取。starter-plus 未传递 monitor，故这里显式引入；
+             宿主若也直接引了 monitor（如 bc-app-mini-program-server），Maven 会去重，不产生重复传递。 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-monitor</artifactId>
+        </dependency>
+        <!-- 业务事件队列（pgmq，Postgres 扩展）：wx 域业务事件（用户资料变更/新用户创建）经 PgMqSender 发布、
+             @PgMqListener 消费对账；宿主 app 已传递依赖该 starter（mini-program/cine/fmz/harness 均显式引入），
+             本模块补充编译期依赖以提供 mq 能力；只是类路径依赖，不自动扫描 pgmq 包（跳过 SysPq 管理后台）。 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-pgmq</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 依赖库：不设 jib.skip=false / jib.main.class，CI 的「可部署应用自动发现」与镜像构建都会跳过本模块 -->
+</project>

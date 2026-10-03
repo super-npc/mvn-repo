@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bc-app-yolo</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bc-app-yolo-api</artifactId>
+    <name>${project.artifactId}</name>
+    <description>YOLO 目标检测模块对外契约（DTO + ONNX 模型版本检测工具）</description>
+
+    <properties>
+        <!-- 与原模块保持一致：javacv 生态 1.5.13 / onnxruntime 1.24.3 -->
+        <javacv.version>1.5.13</javacv.version>
+        <onnxruntime.version>1.24.3</onnxruntime.version>
+    </properties>
+
+    <dependencies>
+        <!-- 基础框架（传递 bronya-common，提供 ConvertMapper 等公共 DTO/工具） -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-common</artifactId>
+        </dependency>
+
+        <!-- YoloConfig 携带 OpenCV Scalar 颜色类型（javacv 传递 org.bytedeco.opencv 主包，编译期够用） -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+            <version>${javacv.version}</version>
+        </dependency>
+        <!-- YOLOVersionDetector 解析 ONNX 模型头部 -->
+        <dependency>
+            <groupId>com.microsoft.onnxruntime</groupId>
+            <artifactId>onnxruntime</artifactId>
+            <version>${onnxruntime.version}</version>
+        </dependency>
+        <!-- DetectRes / YOLOVersion 枚举带 @EnumValue（与 bronya-shared 同款官方 3.5.16，显式钉版） -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-annotation</artifactId>
+            <version>3.5.16</version>
+        </dependency>
+
+        <!-- 测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

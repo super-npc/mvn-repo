@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bc-app-harness</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bc-app-harness-core</artifactId>
+    <name>${project.artifactId}</name>
+    <description>AI 智能体基础能力模块（harnessAgent 核心 + 用户级/公共配置 + 定时任务；单聊/团队业务模块的公共底座）</description>
+
+    <dependencies>
+        <!-- API 契约 -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-app-harness-api</artifactId>
+        </dependency>
+
+        <!-- Bronya Cloud 框架 Starter -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-spring-boot-starter-rpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-spring-boot-starter-monitor</artifactId>
+        </dependency>
+
+        <!-- admin UI + Web + Arthas: 一行依赖统一引入（内部已传递 bronya-sb-starter-web）
+             详见 bronya-cloud/docs/adr/0009-admin-ui-reuse-bronya-starter-db.md -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <!-- Swagger / springdoc 注解支持（GroupedOpenApi、@Tag、@Operation 等） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-swagger</artifactId>
+        </dependency>
+
+        <!-- Nacos 注册 & 配置中心 -->
+        <!-- Nacos 注册发现 + 配置中心（自研 starter，平替 spring-cloud-alibaba；
+             只依赖 nacos-client 与 Spring 契约，不引入任何 com.alibaba.cloud 组件） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-nacos</artifactId>
+        </dependency>
+
+        <!-- PGMQ（PostgreSQL pgmq 扩展，任务执行 work 队列）
+             任务进 TODO 即投递 TaskExecuteMessage 到 CLUSTERING 单队列 task_execute_message，
+             消费者 TaskWorkConsumer（@PgMqListener）幂等触发执行；装配见
+             extension/pgmq/config/PgMqIntegrationConfiguration -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-pgmq</artifactId>
+        </dependency>
+
+        <!-- ========== 数据库：PostgreSQL 驱动（MyBatis-Plus / JDBC 等由 bronya-sb-starter-plus 传递）========== -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- AgentScope 核心 + Harness（工作区 / 三层记忆 / 会话持久化 / 子 agent / 沙箱）
+             版本由 bronya-parent 引入的 agentscope-bom（${agentscope.version}）统一管理，勿在此写版本号 -->
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-harness</artifactId>
+        </dependency>
+        <!-- 模型扩展：OpenAI 兼容（Chat Completions，DeepSeek/GLM 等多数厂商走此包） -->
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-model-openai</artifactId>
+        </dependency>
+        <!-- 模型扩展：Ollama 本地模型（OLLAMA_BASE_URL，默认 http://localhost:11434） -->
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-model-ollama</artifactId>
+        </dependency>
+        <!-- 技能扩展：Git 技能仓库（技能市场只读分发，clone + 自动同步；写回由 GitSkillSyncService 用 JGit 完成）
+             版本由 agentscope-bom（${agentscope.version}）统一管理，勿在此写版本号 -->
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-skill-git-repository</artifactId>
+        </dependency>
+        <!-- 调度扩展：Quartz 实现（单机/集群共享 Quartz 库；CRON/固定速率定时跑 agent）
+             版本由 agentscope-bom（${agentscope.version}）统一管理，勿在此写版本号；
+             传递引入 quartz；scheduler-common 在其 POM 中被声明为 provided+optional，
+             不会向本模块传递，故此处显式声明为直接依赖（compile 作用域，保证 config 包在 classpath） -->
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-scheduler-quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-scheduler-common</artifactId>
+            <!-- scheduler-common 传递依赖 dashscope 模型扩展（仅 DashScopeModelConfig 用到），
+                 本项目用自建 BronyaSchedulerModelConfig 适配，不需要，排除以避免拉取 dashscope-sdk 重链 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>io.agentscope</groupId>
+                    <artifactId>agentscope-extensions-model-dashscope</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- 状态扩展：Redis 分布式状态存储（state-store-type=redis 时使用；io.agentscope.extensions.redis.state.RedisAgentStateStore
+             经 builder().lettuceClient(...) 构建；传递引入 lettuce/jedis/redisson 客户端，仅 redis 模式才会真正建连）
+             版本由 agentscope-bom（${agentscope.version}）统一管理，勿在此写版本号 -->
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-redis</artifactId>
+        </dependency>
+        <!-- 渠道扩展：飞书/Lark 消息渠道（FeishuChannel + FeishuCallbackController，事件订阅回调模式）
+             channelId 用 channel_config 表主键字符串，配置由 FeishuChannelAssembler 按 DB 装配；
+             版本由 agentscope-bom（${agentscope.version}）统一管理，勿在此写版本号 -->
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-channel-feishu</artifactId>
+        </dependency>
+        <!-- AG-UI 协议扩展（Agent Client API 标准 wire 协议：io.agentscope.core.agui.* 全套——
+             AguiEvent/AguiMessageConverter/AgentEventConverterRegistry/AguiAgentAdapter/AguiEventEncoder）。
+             仅引扩展库（自建 /agui 端点适配 harness 会话体系，官方 spring-boot-starter 装配写死
+             DefaultAgentResolver+内存 ThreadSessionManager，不适用于数据驱动会话，不引）。
+             注意：2.0.2 发布版 agentscope-core/harness jar 不含 io.agentscope.core.agui.* 包，由本 jar 补入 -->
+        <dependency>
+            <groupId>io.agentscope</groupId>
+            <artifactId>agentscope-extensions-agui</artifactId>
+        </dependency>
+
+        <!-- 测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 代码生成器（生成实体/服务等脚手架代码，仅供测试） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-generate-core</artifactId>
+                        <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>
