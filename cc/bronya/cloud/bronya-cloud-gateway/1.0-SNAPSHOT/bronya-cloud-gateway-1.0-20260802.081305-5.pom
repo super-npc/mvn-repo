@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bronya-cloud-gateway</artifactId>
+    <name>${project.artifactId}</name>
+    <description>Spring Cloud Gateway：唯一对外入口 + 统一鉴权 + Swagger 聚合</description>
+
+    <properties>
+        <!-- 开启 jib：mvn -Pjib package 会构建并推送 ${docker.registry}/bronya-cloud-gateway -->
+        <jib.skip>false</jib.skip>
+        <jib.main.class>bronya.cloud.gateway.BronyaCloudGatewayApplication</jib.main.class>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-user-api</artifactId>
+        </dependency>
+        <!-- 可观测性：网关也上报链路（WebFlux 入口 Span），TraceFilter 因非 Servlet 自动不加载 -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-spring-boot-starter-monitor</artifactId>
+        </dependency>
+        <!-- Arthas 在线诊断（tunnel-only，零配置；详见 docs/adr/ADR-0013） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-arthas</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
+        </dependency>
+        <!-- 网关 Swagger 聚合：springdoc-webflux-ui（3.0.x 适配 Spring Boot 4 / Spring 7）。
+             knife4j-gateway 最高仅 4.5.0，编译于 Spring 6，在 Spring 7 会 NoSuchMethodError（HttpHeaders.get(Object) 已移除），故不再使用 -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+        <!-- 第二套 UI /doc.html：knife4j 纯静态前端（无 Java 代码，规避 knife4j-gateway 的 Spring 7 不兼容），
+             读取 springdoc 的 /v3/api-docs/swagger-config 聚合列表 -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-ui</artifactId>
+            <version>${knife4j-ui.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

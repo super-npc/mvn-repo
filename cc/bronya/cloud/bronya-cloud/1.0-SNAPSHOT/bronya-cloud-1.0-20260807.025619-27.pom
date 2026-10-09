@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-parent</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../bronya/bronya-parent/pom.xml</relativePath>
+    </parent>
+
+    <groupId>cc.bronya.cloud</groupId>
+    <artifactId>bronya-cloud</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>bronya-cloud</name>
+    <description>基于 bronya 基础库的 Spring Cloud 微服务骨架（网关 + 用户/鉴权 + sys + demo）</description>
+
+    <properties>
+        <!-- springdoc 3.0.x 适配 Spring Boot 4 / Spring 7（knife4j-gateway 最高 4.5.0 不兼容 Boot 4，故网关不用 knife4j-gateway） -->
+        <springdoc.version>3.0.3</springdoc.version>
+        <!-- knife4j Next 纯静态前端 webjar（com.baizhukui 5.x，React 重写 UI；与 starter-swagger/demo-server 同版统一）：
+             无 Java 代码，Boot 4/WebFlux 无兼容问题；提供第二套 UI /doc.html，读取 springdoc 的 swagger-config -->
+        <knife4j-ui.version>5.2.1</knife4j-ui.version>
+        <!-- Jib 构建镜像用（参考 fmz-app）。镜像名 = ${docker.registry}/${project.artifactId}，与 docker/app/docker-compose.yml 对齐 -->
+        <docker.registry>registry.us-west-1.aliyuncs.com/since</docker.registry>
+        <jib.from.image>openjdk:25-ea-jdk</jib.from.image>
+        <!-- 默认跳过 jib：只有 4 个可部署应用模块把 jib.skip 置为 false -->
+        <jib.skip>true</jib.skip>
+        <!-- 应用主类：由各应用模块覆盖 -->
+        <jib.main.class>UNSET</jib.main.class>
+        <!-- SkyWalking Agent 路径（默认：macOS/Linux 用 ${user.home}/soft/...；Windows 由下方 skywalking-windows profile 自动覆盖为 D:\soft\...，亦可 -Dskywalking.agent.path 强制覆盖） -->
+        <skywalking.agent.path>${user.home}/soft/skywalking-agent/skywalking-agent.jar</skywalking.agent.path>
+        <!-- SkyWalking OAP gRPC 地址 -->
+        <skywalking.collector>127.0.0.1:11800</skywalking.collector>
+    </properties>
+
+    <modules>
+        <module>bronya-cloud-framework</module>
+        <module>bronya-cloud-gateway</module>
+        <module>bronya-cloud-admin-server</module>
+        <module>bronya-cloud-user</module>
+        <module>bronya-cloud-sys</module>
+        <module>bronya-cloud-demo</module>
+        <!-- ===== 中间件能力示例（移植自 spring-cloud-alibaba-example/spring-cloud-2025.1.x）===== -->
+        <!-- 通用能力 demo（nacos-config / rocketmq / sentinel）已并入 bronya-cloud-demo-server -->
+        <module>bronya-cloud-seata</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud / Alibaba BOM（bronya-cloud 专属，spring cloud 版本统一管理在此） -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2025.1.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2025.1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- ========== 基础框架模块 ========== -->
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-spring-boot-starter-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-spring-boot-starter-rpc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-spring-boot-starter-monitor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- ========== 业务模块 api ========== -->
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-user-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-sys-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-demo-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- ========== 业务模块 server ========== -->
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-user-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-sys-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.bronya.cloud</groupId>
+                <artifactId>bronya-cloud-demo-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- SkyWalking Agent 自动加载：spring-boot:run 和 IDEA Spring Boot Run 均生效。
+                     服务名自动取 ${project.artifactId}（通过 SW_AGENT_NAME 环境变量传入 agent）。
+                     agent 路径可通过 -Dskywalking.agent.path 覆盖。不想用 SkyWalking 时置空即可。 -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <agents>
+                            <agent>${skywalking.agent.path}</agent>
+                        </agents>
+                        <environmentVariables>
+                            <SW_AGENT_NAME>${project.artifactId}</SW_AGENT_NAME>
+                            <SW_AGENT_COLLECTOR_BACKEND_SERVICES>${skywalking.collector}</SW_AGENT_COLLECTOR_BACKEND_SERVICES>
+                        </environmentVariables>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <!-- 用 Jib 构建/推送生产镜像：mvn -Pjib clean package -DskipTests
+             凭据走 `docker login registry.us-west-1.aliyuncs.com` 或 settings.xml <server>，不写进 pom。
+             jib 版本由 bronya-parent 的 pluginManagement 统一管理（3.5.1）。 -->
+        <profile>
+            <id>jib</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-maven-plugin</artifactId>
+                        <configuration>
+                            <skip>${jib.skip}</skip>
+                            <from>
+                                <image>${jib.from.image}</image>
+                                <platforms>
+                                    <platform>
+                                        <architecture>amd64</architecture>
+                                        <os>linux</os>
+                                    </platform>
+                                    <platform>
+                                        <architecture>arm64</architecture>
+                                        <os>linux</os>
+                                    </platform>
+                                </platforms>
+                            </from>
+                            <to>
+                                <!-- 镜像名与 docker/app/docker-compose.yml 完全一致 -->
+                                <image>${docker.registry}/${project.artifactId}</image>
+                                <tags>
+                                    <tag>${project.version}</tag>
+                                    <tag>latest</tag>
+                                </tags>
+                            </to>
+                            <container>
+                                <appRoot>/home</appRoot>
+                                <workingDirectory>/home</workingDirectory>
+                                <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                                <mainClass>${jib.main.class}</mainClass>
+                                <environment>
+                                    <TZ>Asia/Shanghai</TZ>
+                                </environment>
+                                <jvmFlags>
+                                    <!-- 容器内存感知：JVM 按容器 cgroup 内存限制自动计算堆（配合 docker 内存限制使用） -->
+                                    <jvmFlag>-XX:+UseContainerSupport</jvmFlag>
+                                    <!-- 远程调试（与 admin-server/fmz/furina 统一开启）：生产需从宿主机调试时，compose 须映射 5005 端口；不调试建议注释掉本参数 -->
+                                    <jvmFlag>-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n</jvmFlag>
+                                    <!-- 代码以 enable-preview 编译，运行时必须一并开启 -->
+                                    <jvmFlag>--enable-preview</jvmFlag>
+                                    <!-- 堆上限 = docker mem_limit × 75%（UseContainerSupport 自动感知 cgroup 限制），留 25% 给非堆 -->
+                                    <jvmFlag>-XX:MaxRAMPercentage=75.0</jvmFlag>
+                                    <!-- 初始堆 25% 按需增长，空闲时收缩归还 OS（低峰最省 RSS） -->
+                                    <jvmFlag>-XX:InitialRAMPercentage=25.0</jvmFlag>
+                                    <!-- 堆空闲收缩：低峰期把未用堆归还 OS -->
+                                    <jvmFlag>-XX:MinHeapFreeRatio=20</jvmFlag>
+                                    <jvmFlag>-XX:MaxHeapFreeRatio=40</jvmFlag>
+                                    <!-- 单线程 GC：小堆最省内存（<4G 场景），多核高并发可评估换 G1 -->
+                                    <jvmFlag>-XX:+UseSerialGC</jvmFlag>
+                                    <!-- 压缩对象头 64→32 位省堆内存（JDK24+，基础镜像需 JDK25） -->
+                                    <jvmFlag>-XX:+UseCompactObjectHeaders</jvmFlag>
+                                    <!-- 元空间上限，防长期运行类元数据膨胀 -->
+                                    <jvmFlag>-XX:MaxMetaspaceSize=256m</jvmFlag>
+                                    <!-- 线程栈 256k（默认 1MB，400+ 线程可省近 300MB 物理内存） -->
+                                    <jvmFlag>-Xss256k</jvmFlag>
+                                    <!-- 直接内存（Netty/Tomcat NIO）显式限高：默认=Xmx，会与堆叠加超出容器内存限制 -->
+                                    <!-- 低资源场景：直接内存上限 256m（堆 768m 的合理比例，Netty 网关够用） -->
+                                    <jvmFlag>-XX:MaxDirectMemorySize=256m</jvmFlag>
+                                    <!-- JIT 代码缓存限高 192m（默认 240m，128m 对大型应用偏紧易触发解释执行回退），省 native 内存 -->
+                                    <jvmFlag>-XX:ReservedCodeCacheSize=192m</jvmFlag>
+                                    <!-- 堆 OOM 直接退出进程，交给 docker restart/编排拉起，避免半死不活持续出错 -->
+                                    <jvmFlag>-XX:+ExitOnOutOfMemoryError</jvmFlag>
+                                    <!-- Java 25 + bronya/olive 基础库运行期反射所需的 opens/exports（对齐 fmz-app） -->
+                                    <jvmFlag>--add-opens=java.base/java.lang=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-opens=java.base/java.lang.invoke=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-opens=java.base/java.lang.reflect=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-opens=java.base/java.util=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-opens=java.base/java.time=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-opens=java.base/java.math=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-opens=java.base/java.io=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-exports=java.base/jdk.internal.ref=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-exports=java.base/sun.nio.ch=ALL-UNNAMED</jvmFlag>
+                                    <jvmFlag>--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED</jvmFlag>
+                                </jvmFlags>
+                            </container>
+                            <allowInsecureRegistries>true</allowInsecureRegistries>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Windows 专属：SkyWalking agent 路径覆盖（按运行 OS 自动激活；macOS/Linux 走默认 ${user.home}/soft/...） -->
+        <profile>
+            <id>skywalking-windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <skywalking.agent.path>D:\soft\skywalking-agent\skywalking-agent.jar</skywalking.agent.path>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>
