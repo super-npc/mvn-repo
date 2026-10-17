@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>ext</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>bronya-sb-starter-forwarder</module>
+        <module>bronya-sb-starter-media</module>
+        <module>bronya-sb-starter-notice</module>
+        <module>bronya-sb-starter-plantuml</module>
+        <module>bronya-sb-starter-proxy</module>
+        <module>bronya-sb-starter-rabbit</module>
+        <module>bronya-sb-starter-rocket</module>
+        <module>bronya-sb-starter-scheduled</module>
+        <module>bronya-sb-starter-ssh</module>
+        <module>bronya-sb-starter-shell</module>
+        <module>bronya-sb-starter-rule</module>
+        <module>bronya-sb-starter-pgmq</module>
+        <module>bronya-sb-starter-pgcache</module>
+        <module>bronya-sb-starter-pgcache-redis-server</module>
+        <module>bronya-sb-starter-crypto</module>
+        <module>bronya-sb-starter-nacos</module>
+        <module>bronya-sb-starter-monitor</module>
+    </modules>
+</project>

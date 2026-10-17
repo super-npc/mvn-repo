@@ -1,0 +1,19 @@
+
+127.0.0.1 npc.com
+127.0.0.1 1panel.npc.com
+127.0.0.1 obsidian.npc.com
+127.0.0.1 n8n.npc.com
+127.0.0.1 rabbit.npc.com
+127.0.0.1 redis.npc.com
+127.0.0.1 fs.npc.com
+127.0.0.1 comfy.npc.com
+127.0.0.1 company.npc.com
+127.0.0.1 ollama.npc.com
+127.0.0.1 frpc.npc.com
+127.0.0.1 clash.npc.com
+127.0.0.1 etcd.npc.com
+127.0.0.1 kafka.npc.com
+127.0.0.1 kafka-map.npc.com
+127.0.0.1 arthas.npc.com
+127.0.0.1 sentry.local.com
+127.0.0.1 sync.local.com

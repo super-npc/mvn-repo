@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>security</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-member</artifactId>
+    <description>C端会员（loginType=member），与后台管理用户(starter-admin)账号体系完全隔离，含会员轻量域与注册/登录</description>
+
+    <dependencies>
+        <!-- sa-token：member 体系 StpLogic（JWT Simple），版本由 bronya-parent dependencyManagement 收口 -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot4-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-jwt</artifactId>
+        </dependency>
+
+        <!-- web 脚手架：MVC/ResultVO/异常兜底；plus：BaseEntity/Repository 基建（DB 依赖由消费方自配数据源） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+
+        <!-- security 域核心：组合注解合并 / 403 异常语义 / JWT 弱密钥校验 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-security-core</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
