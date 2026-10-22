@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-okx</artifactId>
+    <name>${project.artifactId}</name>
+    <description>
+        OKX（欧易）V5 能力库（依赖库，非可部署应用）：V5 REST 装配 / 防错下单 / 挂单管理 /
+        账户与持仓 / 组合估值 / 技术指标快照 / AI 订单留痕。
+        本模块是「业务逻辑的唯一一份」且零 AI 注解——不依赖任何 AI 运行时，
+        各运行时按自家注解体系包一层薄 @Tool 壳后复用：
+          · bc-app-harness-plugin-fmz  → AgentScope io.agentscope.core.tool.Tool（团队/单聊）
+          · bc-app-pipeline-server     → Spring AI org.springframework.ai.tool.annotation.Tool（流水线节点）
+        okx_ai_order 表由宿主 app 的 AutoTable 建在宿主自己的库中。
+        ⚠️ 配置前缀刻意保持 bronya.harness.plugin.fmz.okx（部署契约，见 OkxProperties 类注释）。
+    </description>
+
+    <dependencies>
+        <!-- Bronya starter-plus：OKX V5 REST 客户端（okex/open/api/service，Retrofit + fastjson2 + HmacSHA256 签名）
+             + bronya-shared（OkxTradeApi/OkxMarketApi 等强类型层、指标计算库）
+             + MyBatis-Plus/mpe（OkxAiOrder 实体与 CrudRepository）+ swagger 注解 + autotable -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 依赖库：不设 jib.skip=false / jib.main.class，CI 的「可部署应用自动发现」与镜像构建都会跳过本模块 -->
+</project>

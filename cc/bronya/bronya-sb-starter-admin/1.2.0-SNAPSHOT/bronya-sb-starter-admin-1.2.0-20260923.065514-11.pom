@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>security</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-admin</artifactId>
+    <description>后台管理用户（sys_user 用户中心 + sa-token loginType=admin 鉴权），原 bronya-sb-starter-user</description>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 托管 sa-token-redis-jackson 的传递依赖（redis-template / jackson 等）版本 -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-bom</artifactId>
+                <version>${sa-token.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot4-starter</artifactId>
+        </dependency>
+        <!-- Sa-Token Redis 依赖已移除（2026-09-20）：会话存储已切 PG（PgSaTokenDao，落 pgcache.rstring）。
+             两点关键事实决定了移除是安全的：
+             ① sa-token-redis-jackson 1.46 是个空壳聚合 pom，全仓（含 sa-token 各 jar）没有任何地方把
+                SaTokenDaoForRedisTemplate 注册成 bean ⇒ 此前实际生效的是内存版 SaTokenDaoDefaultImpl，
+                redis 配置在 Sa-Token 这条链路上一直是死配置；
+             ② PgSaTokenDao 已实现并注册为 @Primary（bronya.satoken.pg-dao.enabled 默认 true），
+                会话不再依赖任何 Redis 组件。
+             保留 spring-boot-starter-data-redis 会让它随 admin 传递给 bc-app-user/sys 等，
+             其自动配置创建的连接工厂在没有 Redis 时拖慢/阻断启动 —— 与本次「去 Redis」目标冲突。 -->
+
+        <!-- 图形滑动验证码 -->
+        <dependency>
+            <groupId>cloud.tianai.captcha</groupId>
+            <artifactId>tianai-captcha</artifactId>
+                    </dependency>
+
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-media</artifactId>
+        </dependency>
+
+        <!-- security 域核心：组合注解合并 / 403 异常语义 / JWT 弱密钥校验 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-security-core</artifactId>
+        </dependency>
+
+        <!-- PG 缓存核心：Sa-Token 会话存储的 PG 实现（PgSaTokenDao）落在这上面。
+             虽然 plus → cache → pgcache-core 已传递进来，这里仍显式声明 ——
+             本模块的编译产物直接依赖 PgCacheTemplate，依赖关系要写在明处 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-pgcache-core</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

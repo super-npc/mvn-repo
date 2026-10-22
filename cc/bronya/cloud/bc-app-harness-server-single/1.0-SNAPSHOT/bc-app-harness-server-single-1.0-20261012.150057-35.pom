@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bc-app-harness</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bc-app-harness-server-single</artifactId>
+    <name>${project.artifactId}</name>
+    <description>AI 智能体单聊业务模块（仅依赖 server-core，与团队业务彻底隔离）</description>
+
+    <dependencies>
+        <!-- 基础能力（harnessAgent 核心 + 公共配置 + 定时任务） -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-app-harness-core</artifactId>
+        </dependency>
+        <!-- API 契约 -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-app-harness-api</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

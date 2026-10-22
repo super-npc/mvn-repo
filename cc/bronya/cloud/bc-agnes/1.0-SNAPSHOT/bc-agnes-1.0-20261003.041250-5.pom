@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-agnes</artifactId>
+    <name>${project.artifactId}</name>
+    <description>
+        Agnes 上游私有协议能力库（依赖库，非可部署应用）：图像（POST /images/generations）/
+        视频（POST /videos + GET {origin}/agnesapi）协议调用、连接配置、模型目录校验。
+        三条硬原则：① 零 AI 框架依赖（仅 JDK HttpClient + Jackson，不引 Spring AI / AgentScope / @Tool）；
+        ② 不碰存储（client 只返回 byte[] / AgnesResponse，落盘归宿主：cine→RustFS、matting→微信云托管）；
+        ③ 素材出口抽象为 AgnesMediaRefResolver（宿主按需实现，默认原样透传）。
+        chat 不进本模块（仍走宿主的 Spring AI，保 tool-calling）。
+    </description>
+
+    <dependencies>
+        <!-- ServiceException / CoreErrorCode：统一异常口径（bc-common 同时传递 spring-boot / spring-context /
+             spring-boot-starter-json，即 jackson-databind 与 @ConfigurationProperties / @Component / ObjectProvider 编译期可见） -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-common</artifactId>
+        </dependency>
+        <!-- Jackson：构造/解析上游 JSON（bc-common 已经 spring-boot-starter-json 传递，此处显式声明以固化依赖面） -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <!-- 统一可观测性 starter（可选埋点 hook）：宿主服务已引入 monitor，Maven 自动去重，不产生重复传递。 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-monitor</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 依赖库：不设 jib.skip=false / jib.main.class，CI 的「可部署应用自动发现」与镜像构建都会跳过本模块 -->
+</project>
