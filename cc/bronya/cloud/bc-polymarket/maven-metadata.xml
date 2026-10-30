@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>cc.bronya.cloud</groupId>
+  <artifactId>bc-polymarket</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20261030071548</lastUpdated>
+  </versioning>
+</metadata>

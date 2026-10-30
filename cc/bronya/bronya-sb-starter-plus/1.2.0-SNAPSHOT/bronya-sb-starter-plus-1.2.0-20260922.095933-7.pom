@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bronya-sb-starter-plus</artifactId>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- Amis 注解体系（已从 plus 拆出，供 pgcache-core 等底层模块复用而不引入 plus） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-amis-api</artifactId>
+        </dependency>
+
+        <!-- 通用基础设施（commons / web；bronya-admin-base 已折叠进 web） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-web</artifactId>
+        </dependency>
+
+        <!-- 统一缓存抽象：由底层脚手架决定 Redis/Redisson 或 Caffeine，本模块不再自行定义 CacheManager -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-cache</artifactId>
+        </dependency>
+
+        <!-- 监控能力（amis CRUD 计数埋点 BronyaMetrics 的直接依赖；收敛自原 bronya-sb-starter-metrics） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-monitor</artifactId>
+        </dependency>
+
+        <!-- 规则引擎 starter（原 bronya-admin-rule 已折叠进 rule starter） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-rule</artifactId>
+        </dependency>
+
+        <!-- 文档 starter（统一 OpenAPI + Knife4j /doc.html，可选；amis 字段文档等） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-swagger</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- 第三方库（原 bronya-third 已并入 bronya-shared） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-shared</artifactId>
+        </dependency>
+
+        <!-- 拼音引擎：hutool v7 PinyinUtil 需要单独的拼音实现 jar -->
+        <dependency>
+            <groupId>io.github.biezhi</groupId>
+            <artifactId>TinyPinyin</artifactId>
+        </dependency>
+
+        <!-- MyBatis-Plus（排除 jsqlparser，由下方显式管理版本） -->
+        <dependency>
+            <groupId>org.dromara.mpe</groupId>
+            <artifactId>mybatis-plus-ext-spring-boot4-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.jsqlparser</groupId>
+                    <artifactId>jsqlparser</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-core</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.dromara.autotable</groupId>-->
+<!--            <artifactId>auto-table-annotation</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.dromara.autotable</groupId>-->
+<!--            <artifactId>auto-table-strategy-mysql</artifactId>-->
+<!--        </dependency>-->
+
+        <!-- 数据源 / 多租户 / SQL 监控 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot4-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.gavlyukovskiy</groupId>
+            <artifactId>p6spy-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- 数据库驱动 -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- 配置项加解密（自研，平替 jasypt-spring-boot）：
+             启动期解密 ENC(...) 并回填 Environment（EnvironmentPostProcessor）+ 编程式 CryptoService。
+             这里声明为普通依赖而不是 optional —— 让所有引入 starter-plus 的应用（bronya-cloud 各服务等）
+             自动获得该能力，从而「换实现、不改配置」：它们现存的 jasypt.encryptor.password
+             与 JASYPT_ENCRYPTOR_PASSWORD 仍被新模块识别为兼容别名。 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-crypto</artifactId>
+        </dependency>
+
+        <!-- 规则链 -->
+        <dependency>
+            <groupId>io.github.nemoob</groupId>
+            <artifactId>atlas-chain-core</artifactId>
+        </dependency>
+
+        <!-- Redis（data-redis + Redisson）已移除（2026-09-20）：
+             缓存统一由 pgcache（PostgreSQL）平替，Sa-Token 会话也已切 PG。
+             原 redisson-spring-boot-starter 会「无条件注册 RedissonClient 且创建即连 Redis」，
+             导致任何引入 starter-plus 的应用（哪怕不碰 Redis）都必须连上 Redis 才能启动 ——
+             这是本次去 Redis 的直接阻塞点。限流（RRateLimiter）与排行榜（ZSet）两个能力
+             已分别平替为 PgRateLimiter / pgcache zsetOps，无功能损失。 -->
+    </dependencies>
+
+</project>

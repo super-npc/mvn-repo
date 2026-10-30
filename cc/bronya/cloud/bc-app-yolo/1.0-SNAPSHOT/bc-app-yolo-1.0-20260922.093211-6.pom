@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-app-yolo</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>YOLO 目标检测业务域：图片/视频检测、摄像头接入、本地 ONNX 模型管理（自 furina-project-yolo 迁移重构）</description>
+
+    <properties>
+        <!-- 默认排除的环境依赖测试组（@Tag("integration")）：需要本机原生 OpenCV（D:\soft\opencv）、
+             摄像头设备、本地 ONNX 模型文件，未装环境时 UnsatisfiedLinkError。
+             要跑这些用例：mvn test -Dyolo.excludedGroups=none -Dgroups=integration
+             （POM 里显式配置优先于 -D，故用属性占位实现可覆盖） -->
+        <yolo.excludedGroups>integration</yolo.excludedGroups>
+    </properties>
+
+    <modules>
+        <module>bc-app-yolo-api</module>
+        <module>bc-app-yolo-server</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludedGroups>${yolo.excludedGroups}</excludedGroups>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

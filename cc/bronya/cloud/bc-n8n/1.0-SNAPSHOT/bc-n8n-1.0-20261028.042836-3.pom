@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-n8n</artifactId>
+    <name>${project.artifactId}</name>
+    <description>
+        n8n 能力库（依赖库，非可部署应用，MCP 单协议）：全部 workflow 列表、
+        workflow 是否运行中、按 ID 执行 workflow。零 AI 注解、不碰存储，被宿主 app 按需依赖。
+    </description>
+
+    <dependencies>
+        <!-- HTTP / JSON / Spring 注解（OkHttp + Gson + Spring Boot）；MCP 单协议，
+             不再使用 Retrofit / ApiClient -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <!-- ServiceException / CoreErrorCode：MCP 非 2xx / JSON-RPC error 时抛统一异常 -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-common</artifactId>
+        </dependency>
+        <!-- MCP 工具结果解析（n8n 全 camelCase） -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <!-- 单元测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- 依赖库：不设 jib.skip=false / jib.main.class，CI 的「可部署应用自动发现」与镜像构建都会跳过本模块 -->
+</project>

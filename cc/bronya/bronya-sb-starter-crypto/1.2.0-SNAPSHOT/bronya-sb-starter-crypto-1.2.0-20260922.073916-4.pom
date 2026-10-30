@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-crypto</artifactId>
+
+    <description>配置项加解密（自研，平替 jasypt-spring-boot）：启动期扫描 ENC(...) 密文、解密后回填 Environment；
+加解密引擎可插拔（内置纯 JDK 的 PBE 实现，与 jasypt 密文逐字节兼容；后续可扩展 KMS）。
+零第三方依赖，不引入任何加解密三方库。</description>
+
+    <dependencies>
+        <!-- EnvironmentPostProcessor / SpringApplication / DeferredLogFactory 等 Spring Boot 启动期 API；
+             同时（传递）带来 spring-core / spring-context：Environment、PropertySource、@Configuration、@Bean -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <!-- 自动装配：本 starter 必须走 @AutoConfiguration + AutoConfiguration.imports，
+             不能依赖 @ComponentScan —— 消费方（如 bronya-cloud 各 app）扫的是 bronya.cloud 包，
+             扫不到本模块所在的 bronya.starter.plus.ext.crypto -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <!-- 本模块的 CryptoService 用 @Slf4j 打日志；作为库模块，用到什么就显式声明什么，
+             不依赖消费方恰好在 classpath 上提供了 slf4j（版本由 parent 统一管理） -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <!-- lombok 由 bronya-parent 以 provided 作用域统一提供，各子模块无需声明 -->
+    </dependencies>
+</project>
