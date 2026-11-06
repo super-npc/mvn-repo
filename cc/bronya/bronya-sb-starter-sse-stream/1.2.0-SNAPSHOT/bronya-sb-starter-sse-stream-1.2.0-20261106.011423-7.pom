@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-sse-stream</artifactId>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- MVC / Jetty / Jackson 3 / shared：SSE 全部核心能力只依赖 web starter -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-web</artifactId>
+        </dependency>
+
+        <!-- 推送应用台账落库：实体注解（mpe.autotable）+ mapper（MP） -->
+        <dependency>
+            <groupId>org.dromara.mpe</groupId>
+            <artifactId>mybatis-plus-ext-spring-boot4-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.jsqlparser</groupId>
+                    <artifactId>jsqlparser</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+        </dependency>
+
+        <!-- DataSource / 事务 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <!-- 实体上的 @AmisField（生成器契约；annotation-only） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-amis-api</artifactId>
+        </dependency>
+
+        <!-- ★不依赖 bronya-sb-starter-plus★（2026-11-01 起）：
+             依赖方向是 plus → sse-stream，上游只要引 plus 就带上 SSE 能力，不必再单独引本模块。
+             当时本模块对 plus 只有「顶栏入口」一处 optional 依赖（SseHeaderQuickLinkProvider），
+             已搬到 plus 的 admin.framework.header 包，因此这里必须保持无 plus 依赖，
+             否则 reactor 里 plus → sse-stream → plus 成环，构建直接
+             "The projects in the reactor contain a cyclic reference"（optional 只影响传递性，不影响 reactor 的边）。 -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

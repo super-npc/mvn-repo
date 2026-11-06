@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>cc.bronya</groupId>
+  <artifactId>bronya-spring-boot-starter-arthas</artifactId>
+  <versioning>
+    <versions>
+      <version>1.2.0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20260807091302</lastUpdated>
+  </versioning>
+</metadata>

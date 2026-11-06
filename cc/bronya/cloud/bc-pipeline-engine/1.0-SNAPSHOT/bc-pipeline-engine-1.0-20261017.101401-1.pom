@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-pipeline-engine</artifactId>
+    <name>${project.artifactId}</name>
+    <description>流水线引擎（依赖库，非可部署应用）：DAG 定义装载 / 拓扑执行 / Spring AI 节点装配 /
+        MCP 客户端基础设施 / 运行记录（pgmq 异步）/ 定时触发基类 / 工具注册表 / 只读运行 Controller。
+        与业务无关：节点由 YAML 里的 handlerClass（全限定名）分发，工具由宿主应用按 PipelineToolSource 贡献。
+        宿主：bc-app-pipeline-server（量化）、bc-app-xhs（小红书）。两支各自只带自己的节点 + 工具 + DAG。
+        2026-10-16 由 apps/bc-app-pipeline/bc-app-pipeline-server 抽离（包名 bronya.cloud.apps.pipeline.* → bronya.cloud.pipeline.*）。</description>
+
+    <dependencies>
+        <!-- 流水线对外契约（DAG / 运行 VO） -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-pipeline-api</artifactId>
+        </dependency>
+
+        <!-- 统一响应包装 / 全局异常 / cola BizException + 传递包含 bronya-sb-starter-web -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-common</artifactId>
+        </dependency>
+
+        <!-- 脚手架基座：实体基类(BaseEntity) / Amis 注解 / AutoTable / MyBatis-Plus CrudRepository
+             + 定时任务基类 ScheduledHandler（AbstractPipelineScheduledTask 继承它） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <!-- 定时任务（hutool CronUtil 承载调度）：定时流水线的入口基类所在 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-scheduled</artifactId>
+        </dependency>
+        <!-- pgmq：发起运行 / 运行终态广播（CLUSTERING 串行 + 消费侧重叠闸） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-pgmq</artifactId>
+        </dependency>
+        <!-- Swagger / springdoc 注解（PipelineController 的 @Tag/@Operation） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-swagger</artifactId>
+        </dependency>
+
+        <!-- MCP Java SDK（McpClientService / McpDeclLoader 用 io.modelcontextprotocol.client.McpAsyncClient）。
+             没有任何 BOM 管理它，故写死版本号（与迁出前一致）。 -->
+        <dependency>
+            <groupId>io.modelcontextprotocol.sdk</groupId>
+            <artifactId>mcp</artifactId>
+            <version>0.17.2</version>
+        </dependency>
+
+        <!-- 节点的 AI 能力：Spring AI（ChatClient + @Tool + OpenAI 兼容端点自动装配）。
+             版本由 bronya-parent 导入的 spring-ai-bom 统一管理，勿写 version。 -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-openai</artifactId>
+        </dependency>
+
+        <!-- 导出 YAML（PipelineYamlCodec）。必须显式声明：Spring Boot 4 的 Jackson 3（tools.jackson）
+             只带 core/databind，dataformat-yaml 不在 starter 里。版本由 jackson-bom 管理。 -->
+        <dependency>
+            <groupId>tools.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 依赖库：不设 jib.skip=false / jib.main.class，CI 的「可部署应用自动发现」与镜像构建都会跳过本模块 -->
+</project>

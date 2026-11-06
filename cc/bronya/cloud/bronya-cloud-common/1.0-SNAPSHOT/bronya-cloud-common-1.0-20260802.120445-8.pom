@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud-framework</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bronya-cloud-common</artifactId>
+    <name>${project.artifactId}</name>
+    <description>公共模块：统一响应、分页、异常、枚举、登录用户上下文对象、工具</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <!-- 仅需 bronya-common 的通用 DTO/注解（LoginUser、Menu 等），不引入 starter-web，
+             避免把 mybatis/autotable 等中间件传递给 API 契约模块（user-api 等）与网关 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-common</artifactId>
+            <exclusions>
+                <!-- bronya-shared 中 mybatis 系为 compile 传递，API 模块不需要，排除 -->
+                <exclusion>
+                    <groupId>org.dromara.mpe</groupId>
+                    <artifactId>mybatis-plus-ext-base</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.dromara.mpe</groupId>
+                    <artifactId>mybatis-plus-ext-autotable-annotation</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.dromara.mpe</groupId>
+                    <artifactId>mybatis-plus-ext-bind-annotation</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.mybatis-flex</groupId>
+                    <artifactId>mybatis-flex-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.dromara.autotable</groupId>
+                    <artifactId>auto-table-annotation</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+</project>

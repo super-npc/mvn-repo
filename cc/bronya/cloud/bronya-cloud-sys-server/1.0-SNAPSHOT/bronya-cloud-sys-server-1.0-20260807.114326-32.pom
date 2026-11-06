@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud-sys</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>bronya-cloud-sys-server</artifactId>
+    <name>${project.artifactId}</name>
+
+    <properties>
+        <!-- 开启 jib：mvn -Pjib package 会构建并推送 ${docker.registry}/bronya-cloud-sys-server -->
+        <jib.skip>false</jib.skip>
+        <jib.main.class>bronya.cloud.sys.BronyaCloudSysServerApplication</jib.main.class>
+    </properties>
+    <description>系统业务服务实现</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-sys-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-spring-boot-starter-rpc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bronya-cloud-spring-boot-starter-monitor</artifactId>
+        </dependency>
+        <!-- Arthas 在线诊断（tunnel-only，零配置；详见 docs/adr/ADR-0013） -->
+
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara.autotable</groupId>
+            <artifactId>auto-table-annotation</artifactId>
+            <version>2.5.15</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.dromara.mpe</groupId>
+            <artifactId>mybatis-plus-ext-spring-boot4-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-spring-boot-starter-plus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-generate-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

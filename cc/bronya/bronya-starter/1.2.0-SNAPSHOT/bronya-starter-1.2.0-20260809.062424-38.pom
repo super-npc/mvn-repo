@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-parent</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../bronya-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-starter</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>bronya-spring-boot-starter-web</module>
+        <module>bronya-spring-boot-starter-cache</module>
+        <module>bronya-spring-boot-starter-metrics</module>
+        <module>bronya-spring-boot-starter-plus</module>
+        <module>bronya-spring-boot-starter-quick-login</module>
+        <module>bronya-spring-boot-starter-user</module>
+
+        <module>bronya-spring-boot-starter-swagger</module>
+        <module>ext/plus</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!--
+        依赖版本治理：统一收口可能被传递引入、但自身 POM 存在瑕疵或版本过旧的组件。
+        - javassist：rocketmq -> reflections -> javassist 的传递依赖。
+          原 3.21.0-GA 的 POM 在 Maven Central 已损坏，会触发 "building the effective model" 告警。
+          钉到最新 GA 3.30.2-GA（2023-12-24，POM 合法，Spring Boot 4 兼容；字节码库版本与 Boot 无关）。
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>3.30.2-GA</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git-bronya.properties
+                    </generateGitPropertiesFilename>
+                    <commitIdGenerationMode>full</commitIdGenerationMode>
+                    <offline>true</offline>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!--
+        静态资源瘦身：CI 打包时剔除三个 starter 的 src/main/resources/static
+        （plus ~53M + user ~3.8M + quick-login ~4.3M ≈ 61MB），避免每个依赖方
+        微服务镜像重复内置同一份静态文件，导致 jar / 镜像体积膨胀。
+
+        仅通过 -Pexclude-static 显式激活（见 bronya-cloud/.github/workflows/deploy.yml
+        的 bronya 构建步骤）。本地开发（mvn install / IDE / mvn spring-boot:run）不激活
+        该 profile，静态资源照常打入 jar，开发与本地启动体验完全不变。
+        运行时由各 Spring Boot 应用挂载 bronya-agent 卷（file:/app/bronya-static/）
+        提供静态服务，与未优化前行为一致。
+    -->
+    <profiles>
+        <profile>
+            <id>exclude-static</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>static/**</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
