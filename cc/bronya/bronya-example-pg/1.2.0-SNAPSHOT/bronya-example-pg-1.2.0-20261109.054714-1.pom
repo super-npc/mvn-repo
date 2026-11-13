@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        PostgreSQL 系示例应用的归集包（纯聚合，不做父级继承）。
+        每个子模块的 <parent> 仍指向 bronya-example（relativePath = ../../pom.xml），
+        因此拆包/挪目录不会改变任何依赖、属性与发布坐标 —— 只改 reactor 的组织方式。
+
+        ⚠️ 新增 PG 示例时两处都要改：
+           1) 本文件的 <modules>
+           2) 子模块 pom 的 <relativePath>../../pom.xml</relativePath>
+    -->
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-example</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-example-pg</artifactId>
+    <packaging>pom</packaging>
+    <name>bronya-example-pg</name>
+    <description>PostgreSQL 能力示例归集（备份 / 布隆 / 缓存 / 序号 / 状态机 / MQ / MQTT / 分区 / PostGIS / 检索 / 时序 / 向量 / 逻辑解码）</description>
+
+    <modules>
+        <module>bronya-example-pg-backup</module>
+        <module>bronya-example-pg-bloom</module>
+        <module>bronya-example-pg-cache</module>
+        <module>bronya-example-pg-counter</module>
+        <module>bronya-example-pg-fsm</module>
+        <module>bronya-example-pg-mq</module>
+        <module>bronya-example-pg-mqtt</module>
+        <module>bronya-example-pg-partman</module>
+        <module>bronya-example-pg-postgis</module>
+        <module>bronya-example-pg-search</module>
+        <module>bronya-example-pg-timescale</module>
+        <module>bronya-example-pg-vector</module>
+        <module>bronya-example-pg-wal2json</module>
+    </modules>
+
+</project>

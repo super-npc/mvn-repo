@@ -1,0 +1,24 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Wed Oct 22 14:23:15 GMT+08:00 2025
+https\://packages.aliyun.com/maven/repository/2058707-snapshot-waccbD/.error=
+https\://repo1.maven.org/maven2/.error=
+@default-maven-default-http-blocker-http\://0.0.0.0/.lastUpdated=1761113662585
+https\://repo.maven.apache.org/maven2/.lastUpdated=1761114195186
+https\://central.sonatype.com/repository/maven-snapshots/.lastUpdated=1761113660983
+https\://central.sonatype.com/repository/maven-snapshots/.error=
+https\://raw.github.com/super-npc/mvn-repo/master/.error=
+https\://packages.aliyun.com/maven/repository/2058707-snapshot-waccbD/.lastUpdated=1761113655894
+https\://sdk.getui.com/maven/.error=Could not transfer artifact com.gexin.platform\:gexin-rp-sdk-base\:pom\:4.0.0.12 from/to getui (https\://sdk.getui.com/maven/)\: sdk.getui.com
+http\://0.0.0.0/.error=Could not transfer artifact com.gexin.platform\:gexin-rp-sdk-base\:pom\:4.0.0.12 from/to maven-default-http-blocker (http\://0.0.0.0/)\: Blocked mirror for repositories\: [getui-nexus (http\://mvn.gt.igexin.com/nexus/content/repositories/releases/, default, releases+snapshots)]
+https\://repo.spring.io/milestone/.lastUpdated=1761113660797
+https\://repo.clojars.org/.lastUpdated=1761113662584
+https\://repo.maven.apache.org/maven2/.error=
+https\://repo.spring.io/milestone/.error=
+https\://jitpack.io/.error=
+https\://packages.aliyun.com/maven/repository/2058707-release-5rdvs1/.lastUpdated=1761113655774
+https\://jitpack.io/.lastUpdated=1761113661841
+https\://packages.aliyun.com/maven/repository/2058707-release-5rdvs1/.error=
+https\://raw.github.com/super-npc/mvn-repo/master/.lastUpdated=1761114193733
+https\://repo.clojars.org/.error=
+@default-getui-https\://sdk.getui.com/maven/.lastUpdated=1761113660274
+https\://repo1.maven.org/maven2/.lastUpdated=1761113661323

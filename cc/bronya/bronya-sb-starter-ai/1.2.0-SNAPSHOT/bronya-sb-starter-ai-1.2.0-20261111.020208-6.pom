@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        ONNX 推理能力 starter 的归集包（纯聚合，不做父级继承 —— 与上级 ext/pom.xml 同一体例）。
+        每个子模块的 <parent> 仍是 bronya-starter（relativePath = ../../../pom.xml），
+        因此拆包/挪目录不改变任何依赖、属性与发布坐标，只改 reactor 的组织方式。
+
+        ⚠️ 新增 AI starter 时两处都要改：
+           1) 本文件的 <modules>
+           2) 子模块 pom 的 <relativePath>../../../pom.xml</relativePath>
+    -->
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-ai</artifactId>
+    <packaging>pom</packaging>
+    <name>bronya-sb-starter-ai</name>
+    <description>ONNX 推理能力 starter 归集（人脸 / 文件类型 / 车牌 / 版面 / 人像分割 / 目标检测 / 超分 / 文本行方向 / 通用分类 / 验证码）</description>
+
+    <modules>
+        <module>bronya-sb-starter-ai-core</module>
+        <module>bronya-sb-starter-ai-face</module>
+        <module>bronya-sb-starter-ai-filetype</module>
+        <module>bronya-sb-starter-ai-plate</module>
+        <module>bronya-sb-starter-ai-layout</module>
+        <module>bronya-sb-starter-ai-humanseg</module>
+        <module>bronya-sb-starter-ai-detect</module>
+        <module>bronya-sb-starter-ai-enhance</module>
+        <module>bronya-sb-starter-ai-textline</module>
+        <module>bronya-sb-starter-ai-classify</module>
+        <module>bronya-sb-starter-ai-captcha</module>
+    </modules>
+
+</project>

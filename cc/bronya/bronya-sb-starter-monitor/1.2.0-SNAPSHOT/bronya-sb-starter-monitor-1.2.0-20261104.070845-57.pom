@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-monitor</artifactId>
+    <name>${project.artifactId}</name>
+    <description>
+        统一可观测性 starter（bronya 生态唯一监控出口）：
+        指标门面 BronyaMetrics + @BizMetric 声明式埋点 + 链路追踪 @BizTrace/TraceFilter + application 公共标签。
+        收敛原 bronya-sb-starter-metrics（指标）与 bc-spring-boot-starter-monitor（链路追踪）能力。
+    </description>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- 共享工具：TraceId / AdminBaseConstant（TraceFilter 回写链路 ID 依赖） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-shared</artifactId>
+        </dependency>
+
+        <!-- Actuator：MeterRegistry 基础设施 + 端点（health/info/prometheus） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- AOP：@BizMetric / @BizTrace 切面依赖 AspectJ 自动代理（Boot 4 中 aop starter 更名为 aspectj） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
+        </dependency>
+
+        <!-- OTLP 指标注册表：按 management.otlp.metrics.export.* 主动推送到 OpenObserve。
+             平替原 micrometer-registry-prometheus（拉取式 /actuator/prometheus）——
+             推 vs 拉是本次可观测性栈替换的根因，端点不再由 Prometheus 抓、改由应用自推。 -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-otlp</artifactId>
+        </dependency>
+
+        <!-- 链路追踪：Spring Boot 4 tracing 自动配置（OTel 桥接）。
+             传递引入 spring-boot-micrometer-tracing / spring-boot-opentelemetry 两个 autoconfig 模块。
+             Span 导出走 OTLP：management.otlp.tracing.endpoint 指向 OpenObserve
+             （原 SkyWalking -javaagent → OAP 11800 通道已废弃）。 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-micrometer-tracing-opentelemetry</artifactId>
+        </dependency>
+        <!-- Micrometer↔OpenTelemetry 桥接实现 -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+        <!-- OTLP 导出器：没有它时 tracing 自动配置只建 Span 不导出（数据永远到不了 OpenObserve，
+             且启动期毫无报错）—— 必须显式引入。版本由 spring-boot-dependencies 管理。 -->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-otlp</artifactId>
+        </dependency>
+
+        <!-- 仅 TraceFilter 使用，设为 provided：非 Servlet 应用（如纯批处理 / 网关 WebFlux）不需要 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

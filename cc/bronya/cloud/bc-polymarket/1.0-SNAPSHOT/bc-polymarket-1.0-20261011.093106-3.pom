@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-polymarket</artifactId>
+    <name>${project.artifactId}</name>
+    <description>
+        Polymarket 上游 REST 能力库（依赖库，非可部署应用）：CLOB / Gamma / Data 三类
+        API 的 Retrofit 客户端（events/markets/orderbook/orders/trades/auth/balance/search/
+        comments/profile/sports/series/builders/leaderboard/health），统一入口 PolymarketClient。
+        零 AI 注解、不碰存储，被宿主 app 按需依赖。上游速率限制见 base.PolymarketConfig 注释。
+    </description>
+
+    <dependencies>
+        <!-- 框架统一 RPC 栈（ApiClient（Retrofit + OkHttp）+ bronya-shared）：承载 Polymarket 的
+             HTTP 调用；guava RateLimiter / okhttp / retrofit 随 starter-plus 传递。 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <!-- Hutool JSON：请求体序列化（Auth/orders 等 POST 接口用 JSONUtil 拼请求体），版本由 bronya-parent 管理 -->
+        <dependency>
+            <groupId>cn.hutool.v7</groupId>
+            <artifactId>hutool-json</artifactId>
+        </dependency>
+        <!-- 单元/集成测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- 依赖库：不设 jib.skip=false / jib.main.class，CI 的「可部署应用自动发现」与镜像构建都会跳过本模块 -->
+</project>
