@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-scheduled</artifactId>
+
+    <dependencies>
+        <!-- Hutool v7 按需模块（版本由 bronya-parent 的 hutool-bom 管理；hutool-core 已由父 POM 下发） -->
+        <dependency>
+            <groupId>cn.hutool.v7</groupId>
+            <artifactId>hutool-extra</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool.v7</groupId>
+            <artifactId>hutool-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool.v7</groupId>
+            <artifactId>hutool-cron</artifactId>
+        </dependency>
+
+        <!-- bronya-admin-base 已折叠进 web starter（经 plus 传递引入） -->
+        <!-- 封装基础库 bronya-admin-scheduled（已折叠进本 starter） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <!-- 定时任务依赖规则引擎（原 bronya-admin-rule 已折叠进 rule starter） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-rule</artifactId>
+        </dependency>
+        <!-- Rustrak Crons：协议客户端与编排（RustrakCronReporter / CronCheckInScope / 预建与种子）
+             全部在 rustrak starter 里，本模块只提供任务清单（RustrakCronTaskSource 实现）与 begin/end 调用点。
+             显式声明而不是靠 plus 传递：上游收窄传递依赖时不会变成「编译绿、运行期缺类」。 -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-rustrak</artifactId>
+        </dependency>
+
+        <!-- BronyaMetrics：任务执行指标（与 Rustrak 无关，仍归 monitor） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-monitor</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

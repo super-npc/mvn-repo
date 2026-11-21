@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-example-demo3</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>示例：微服务验收对端，bc-example-demo3 与 bc-example-demo2 通过 OpenFeign 互相调用
+        （demo3 → demo2、demo2 → demo3），用于验证自研 bronya-sb-starter-nacos 的注册发现
+        （DiscoveryClient / ServiceRegistry）与 Feign + 负载均衡链路是否正常。
+        故意不依赖数据库，便于随时起服务做验收；不参与生产 docker 部署。</description>
+
+    <modules>
+        <module>bc-example-demo3-api</module>
+        <module>bc-example-demo3-server</module>
+    </modules>
+
+</project>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bc-app-harness-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-app-harness-plugin-video-editor</artifactId>
+    <name>${project.artifactId}</name>
+    <description>视频剪辑插件：Pexels/Pixabay 免版权素材搜索下载 + 沙箱 ffmpeg 视频处理 + TTS 配音（UnifiedTTS/阿里 CosyVoice）</description>
+
+    <dependencies>
+        <!-- harnessAgent 核心能力（装配/工具扩展点/沙箱/团队配置，插件在此基础上叠加 @Tool 能力） -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-app-harness-core</artifactId>
+        </dependency>
+
+        <!-- Bronya 共享库：Pexels/Pixabay 免版权素材 CLIs（搜索/详情，Retrofit + OkHttp） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-shared</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

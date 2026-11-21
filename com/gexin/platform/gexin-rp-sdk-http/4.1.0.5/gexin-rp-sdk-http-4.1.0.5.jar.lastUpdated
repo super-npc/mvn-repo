@@ -1,0 +1,17 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Wed Oct 22 13:43:15 GMT+08:00 2025
+https\://packages.aliyun.com/maven/repository/2058707-release-5rdvs1/.lastUpdated=1761111795266
+https\://jitpack.io/.error=
+https\://maven.aliyun.com/repository/public/.lastUpdated=1761111373592
+https\://repo.clojars.org/.error=
+https\://raw.github.com/super-npc/mvn-repo/master/.lastUpdated=1761111372815
+https\://repo.spring.io/milestone/.lastUpdated=1761111373052
+http\://0.0.0.0/.error=Could not transfer artifact com.gexin.platform\:gexin-rp-sdk-http\:jar\:4.1.0.5 from/to maven-default-http-blocker (http\://0.0.0.0/)\: Blocked mirror for repositories\: [getui-nexus (http\://mvn.gt.igexin.com/nexus/content/repositories/releases/, default, releases+snapshots)]
+https\://jitpack.io/.lastUpdated=1761111373818
+https\://repo.clojars.org/.lastUpdated=1761111374402
+@default-maven-default-http-blocker-http\://0.0.0.0/.lastUpdated=1761109399764
+https\://repo.maven.apache.org/maven2/.lastUpdated=1761109399764
+https\://repo.spring.io/milestone/.error=
+https\://repo.maven.apache.org/maven2/.error=
+https\://raw.github.com/super-npc/mvn-repo/master/.error=
+https\://maven.aliyun.com/repository/public/.error=

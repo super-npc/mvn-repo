@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://maven.apache.org/METADATA/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/METADATA/1.1.0 https://maven.apache.org/xsd/repository-metadata-1.1.0.xsd" modelVersion="1.1.0">
+  <groupId>com.alibaba.cloud</groupId>
+  <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+  <versioning>
+    <lastUpdated>20250926145910</lastUpdated>
+    <snapshot>
+      <timestamp>20250926.145910</timestamp>
+      <buildNumber>12</buildNumber>
+    </snapshot>
+    <snapshotVersions>
+      <snapshotVersion>
+        <classifier>consumer</classifier>
+        <extension>pom</extension>
+        <value>2025.1.0.0-20250926.145910-12</value>
+        <updated>20250926145910</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <classifier></classifier>
+        <extension>pom</extension>
+        <value>2025.1.0.0-20250926.145910-11</value>
+        <updated>20250926145910</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+  <version>2025.1.0.0-SNAPSHOT</version>
+</metadata>

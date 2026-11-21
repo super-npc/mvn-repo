@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-app-mini-program</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>小程序后端聚合（一个可部署服务 + 一个契约模块；每个小程序是 server 里的一个包）</description>
+
+    <modules>
+        <module>bc-app-mini-program-api</module>
+        <module>bc-app-mini-program-server</module>
+    </modules>
+
+</project>

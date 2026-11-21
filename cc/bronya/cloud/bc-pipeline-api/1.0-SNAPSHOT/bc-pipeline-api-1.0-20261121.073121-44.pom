@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-pipeline-api</artifactId>
+    <name>${project.artifactId}</name>
+    <description>流水线对外契约（依赖库，非可部署应用）：流水线 VO（PipelineDagVO / PipelineRunVO / PipelineRunStartReq / PipelineSaveReq 等）
+        + Feign 接口 PipelineApi。被 bc-pipeline-engine 依赖，所有「跑流水线」的应用共同消费。
+        2026-10-16 由 apps/bc-app-pipeline/bc-app-pipeline-api 迁入 modules（包名 bronya.cloud.apps.pipeline.api → bronya.cloud.pipeline.api）。</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-common</artifactId>
+        </dependency>
+        <!-- Feign 契约（@FeignClient + spring-web 注解） -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Swagger / OpenAPI 注解支持（@Schema、@Operation 等；版本由 bronya-parent 管理） -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+
+        <!--
+          枚举的线值注解（SchemaFieldType 的 @JsonValue/@JsonCreator）：
+          Spring Boot 4 用 Jackson 3（tools.jackson.*），但它**沿用 2.x 的注解模块**
+          （tools.jackson:jackson-bom 里 jackson.version.annotations=2.21，包名仍是
+          com.fasterxml.jackson.annotation），故这里声明的是 2.x 坐标 —— 版本由
+          spring-boot-dependencies → jackson-bom 管理，不写版本号。
+          显式声明的原因同 server 模块的 dataformat-yaml：直接 import 的依赖不该挂在别人的依赖树上。
+        -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 依赖库：不设 jib.skip=false / jib.main.class，CI 的「可部署应用自动发现」与镜像构建都会跳过本模块 -->
+</project>
