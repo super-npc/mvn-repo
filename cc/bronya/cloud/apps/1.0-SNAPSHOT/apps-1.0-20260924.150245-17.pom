@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bronya-cloud</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>apps</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>业务应用聚合：sys（系统域）/ user（用户域）/ harness（AI 智能体）/ yolo（YOLO 目标检测）/ cine（视频工作台）/ mini-program（微信小程序后端，承载打牌记账等 N 个小程序）/ fmz（量化交易，2026-09-21 由独立仓库 fmz-app 迁入）。
+        通用能力演示与微服务验收对端已迁至 examples（bc-example / bc-example-demo2）</description>
+    <modules>
+        <module>bc-app-sys</module>
+        <module>bc-app-user</module>
+        <module>bc-app-harness</module>
+        <module>bc-app-pipeline</module>
+        <module>bc-app-yolo</module>
+        <module>bc-app-cine</module>
+        <module>bc-app-mini-program</module>
+        <module>bc-app-fmz</module>
+    </modules>
+</project>

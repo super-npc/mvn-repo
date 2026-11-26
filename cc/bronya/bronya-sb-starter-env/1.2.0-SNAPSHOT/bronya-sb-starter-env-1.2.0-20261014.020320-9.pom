@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-env</artifactId>
+    <name>${project.artifactId}</name>
+    <description>动态环境变量 starter：@AmisEnv 配置类扫描、库值注册为运行期 PropertySource、可视化控制台 /env/env.html</description>
+
+    <dependencies>
+        <!-- Hutool v7 按需模块（版本由 bronya-parent 的 hutool-bom 管理；hutool-core 已由父 POM 下发） -->
+        <dependency>
+            <groupId>cn.hutool.v7</groupId>
+            <artifactId>hutool-json</artifactId>
+        </dependency>
+
+        <!-- 后台框架基座（amis / autotable / mybatis-plus / bronya-shared 等） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-jin10-mcp</artifactId>
+    <name>${project.artifactId}</name>
+    <description>
+        金十数据 MCP 能力库（依赖库，非可部署应用）：把 mcp.jin10.com 暴露的 8 个工具
+        （行情 get_quote / K 线 get_kline、消息面 list_flash / list_news / list_calendar /
+        search_flash / search_news / get_news）与 quote://codes 资源封装成强类型 API ——
+        统一入口 Jin10McpClient，出参是 record 模型，失败抛 cola BizException。
+
+        四条硬原则：
+        ① 只封协议，不做业务：不碰选题、不改写、不落库、不缓存业务数据；
+        ② 一个端点一个门面：连接名 / 地址 / api-key 由 Jin10McpEndpoint 注入，
+           库内不读调用方的业务配置，同进程挂多套 key（多环境 / 多租户）不会串；
+        ③ 宿主零配置：自己按 HttpClientStreamableHttpTransport 建传输，
+           不依赖 spring.ai.mcp.client.* 那套全局装配（避免为了接一个数据源去改全局 MCP 设置）；
+        ④ 首次调用才建会话：jin10 不可达不会拖垮宿主启动。
+
+        ★上游 wire 形态的坑都在库内消化★（见 README 式 Javadoc）：价格是字符串、日历 data 是数组
+        而非对象、search_flash 无游标、业务失败藏在 status=400 里（isError 同时为 true）。
+    </description>
+
+    <dependencies>
+        <!-- ServiceException / CoreErrorCode：MCP 传输失败与上游业务失败统一抛异常（同时传递 spring 注解） -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-common</artifactId>
+        </dependency>
+
+        <!-- MCP Java SDK（McpClient / HttpClientStreamableHttpTransport / McpSchema）。
+             ★为什么不走 spring-ai-starter-mcp-client★：那条路要求宿主在 yml 里声明
+             spring.ai.mcp.client.streamable-http.connections 并动全局开关（initialized / toolcallback），
+             而这里只接一个数据源，不值得为它改宿主的全局 MCP 装配。
+             版本写死 2.1.0：没有任何 BOM 管理 io.modelcontextprotocol.sdk（spring-ai 2.0.2 自己也是
+             传递依赖 2.1.0）。全仓 mcp 版本统一钉在 2.1.0，不再有两代 jar 并存撞 NoSuchMethodError 的问题。 -->
+        <dependency>
+            <groupId>io.modelcontextprotocol.sdk</groupId>
+            <artifactId>mcp</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
+        <!-- @ConfigurationProperties / @EnableConfigurationProperties（在 spring-boot 里，不在 spring-context） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- 依赖库：不设 jib.skip=false / jib.main.class，CI 的「可部署应用自动发现」与镜像构建都会跳过本模块 -->
+</project>

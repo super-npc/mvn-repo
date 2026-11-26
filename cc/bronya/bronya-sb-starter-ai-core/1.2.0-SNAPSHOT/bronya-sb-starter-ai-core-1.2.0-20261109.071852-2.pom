@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-ai-core</artifactId>
+    <name>${project.artifactId}</name>
+    <description>ONNX 推理底座：会话工厂 / 模型会话 / 统一异常 / 模型路径解析 / 能力状态 SPI（零 Spring 引擎层）</description>
+
+    <properties>
+        <!-- ONNX Runtime 与 OpenCV 的版本在本模块单点钉死：能力子模块只依赖本模块传递获得 -->
+        <onnxruntime.version>1.18.0</onnxruntime.version>
+        <openpnp-opencv.version>4.9.0-0</openpnp-opencv.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.microsoft.onnxruntime</groupId>
+            <artifactId>onnxruntime</artifactId>
+            <version>${onnxruntime.version}</version>
+        </dependency>
+        <!-- 两个 jar 都自带全平台 native（linux amd64/arm64、mac/win），跨架构无需额外处理 -->
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${openpnp-opencv.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- 自动装配层（引擎层本身零 Spring，只用本模块的 status/model 工具类） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

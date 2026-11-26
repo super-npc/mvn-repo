@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-xhs-mcp</artifactId>
+    <name>${project.artifactId}</name>
+    <description>
+        小红书 MCP 能力库（依赖库，非可部署应用）：把 xiaohongshu-mcp（xpzouying/xiaohongshu-mcp）
+        暴露的 18 个工具封装成强类型 API —— 登录（状态/二维码/重置）、发布（图文/视频）、
+        读（搜索/首页流/笔记详情/我的主页/他人主页/通知/未读数）、互动（点赞/收藏/评论/回评论/
+        点赞通知/回复通知），以及发布前必做的「把图片投进该账号 MCP 容器 /app/images」。
+
+        两条硬原则：
+        ① 只封协议，不做业务：不碰选题、不改写文案、不落库，出参是上游原文或极薄的结果对象；
+        ② 一个端点一个门面：会话名与 upload 地址都由调用方以 XhsMcpEndpoint 注入，
+           库内不读任何业务配置，因此同一进程里挂多少个号都不会串。
+
+        底层复用 Spring AI 的 MCP 客户端装配（spring.ai.mcp.client.streamable-http.connections），
+        不自建传输层。
+    </description>
+
+    <dependencies>
+        <!-- ServiceException / CoreErrorCode：MCP 调用与上传失败统一抛异常（同时传递 jackson + spring 注解） -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-common</artifactId>
+        </dependency>
+        <!-- McpSyncClient / McpClientTransport / NamedClientMcpTransport：
+             连接（url/endpoint/请求定制器）仍由 spring-ai 按宿主 yml 装好，本库只按名字建会话 -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

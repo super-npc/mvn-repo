@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-pgmq</artifactId>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <!--
+            pgmq-jdbc-client（org.andreaesposito:pgmq-jdbc-client:1.0.0）已改为源码内置：
+            上游制品仅托管在 GitHub Packages（maven.pkg.github.com/roy20021/pgmq-jdbc-client），
+            该仓库无 SNAPSHOT、且读取必须带 token —— Maven 解析任意 *-SNAPSHOT 时会向它请求
+            maven-metadata.xml（匿名 401、带 token 404），每次构建白等/拖慢 CI。
+            现源码直接放在本模块 src/main/java/org/andreaesposito/pgmq/jdbc/client/（逐字复刻，
+            包名不变，故各调用方 import 无需改动），许可证见 LICENSE-pgmq-jdbc-client.txt（MPL-2.0）。
+            org.postgresql:postgresql 由 bronya-sb-starter-plus 以 compile 作用域传递提供。
+        -->
+    </dependencies>
+
+</project>

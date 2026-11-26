@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cc.bronya</groupId>
+    <artifactId>bronya</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>bronya-processor</module>
+        <module>bronya-shared</module> <!-- 对外 SDK：工具类 + 第三方调用统一收口 -->
+        <module>bronya-common</module> <!-- 公共基础库（依赖 shared 获取工具类） -->
+
+        <module>bronya-starter</module>
+        <module>bronya-parent</module>
+    </modules>
+
+    <properties>
+        <java.version>25</java.version>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!--
+        示例项目（bronya-example/，38 个模块）默认【不参与】根 reactor 构建。
+        依据：主工程没有任何模块依赖 example 制品（全仓 pom 除本文件外零引用），
+        构建它们只是白花时间；示例自身是独立聚合器（bronya-example/pom.xml 的
+        parent 直指 bronya-parent），可脱离根 POM 单独构建。
+
+        需要示例时显式打开：
+            mvn install -Pexamples                                  # 全量（含示例）
+            mvn -Pexamples -pl bronya-example/bronya-example-web spring-boot:run
+
+        ★未激活本 profile 时，任何 -pl bronya-example/... 都会报
+          Could not find the selected project in the reactor★ —— 看见就补 -Pexamples。
+        ★不要给这个 profile 加 activeByDefault★ —— 等于回到「每次构建都编译示例」。
+        CI（bronya-cloud/.github/workflows/deploy-java.yml 步骤①）同样不激活它，
+        示例制品因此不再随发布链进 mvn-repo。
+    -->
+    <profiles>
+        <profile>
+            <id>examples</id>
+            <modules>
+                <module>bronya-example</module>
+            </modules>
+        </profile>
+    </profiles>
+
+</project>

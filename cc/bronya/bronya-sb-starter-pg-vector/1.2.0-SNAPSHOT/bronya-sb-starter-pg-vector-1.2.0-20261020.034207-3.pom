@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-pg-vector</artifactId>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!--
+            提供 DataSource / PostgreSQL 驱动 / MyBatis-Plus / Amis 后台等基础能力。
+            org.postgresql:postgresql 由 bronya-sb-starter-plus 以 compile 作用域传递提供；
+            本模块同时依赖其 @ComponentScan("bronya") 的自动配置链路（AbstractBronyaWebConfiguration），
+            使 PgVectorConfig 无需 META-INF 自动配置清单即可被扫入。
+        -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+        <!--
+            嵌入模型接口 org.springframework.ai.embedding.EmbeddingModel：
+            「文本向量检索」能力层（PgVectorTextStore）的 API 本身就长在它上面，属于必须传递的依赖
+            （本模块很小，不会把 onnxruntime / DJL 这类重依赖带进来）。
+            版本由 bronya-parent 的 spring-ai-bom 统一管理。
+        -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-model</artifactId>
+        </dependency>
+        <!--
+            本地 ONNX 嵌入模型实现 TransformersEmbeddingModel：★optional★，刻意不传递。
+            它会把 onnxruntime + DJL（含 PyTorch CPU 原生库缓存）整棵依赖树带进来，
+            而绝大多数引用方要么自带 EmbeddingModel（OpenAI / 通义 / 自研），要么压根不用文本检索。
+            需要本地离线模型的应用自己引这一行依赖，再打开 bronya.pgvector.onnx.enabled=true，
+            由 PgVectorOnnxConfig 替它装配（见该类的 @ConditionalOnClass）。
+        -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-transformers</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cc.bronya.cloud</groupId>
+        <artifactId>bc-app-harness-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bc-app-harness-plugin-fmz</artifactId>
+    <name>${project.artifactId}</name>
+    <description>fmz 插件：OKX（欧易）能力的 AgentScope @Tool 适配层（团队/单聊用）—— 业务逻辑在 bc-okx，本模块只把能力包成 io.agentscope.core.tool.Tool 并挂进 AgentToolkitFactory</description>
+
+    <dependencies>
+        <!-- harnessAgent 核心能力（装配/工具扩展点，插件在此基础上叠加 @Tool 能力） -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-app-harness-core</artifactId>
+        </dependency>
+
+        <!-- OKX 能力库（V5 装配 / 防错下单 / 挂单管理 / 账户 / 组合估值 / 指标快照 / 订单留痕）。
+             本模块只负责「把能力包成 AgentScope @Tool」（io.agentscope.core.tool.Tool）；
+             同一批能力被流水线模块包成 Spring AI @Tool —— 注解不通用，故能力层独立成模块、两边各包一层薄壳。 -->
+        <dependency>
+            <groupId>cc.bronya.cloud</groupId>
+            <artifactId>bc-okx</artifactId>
+        </dependency>
+
+        <!-- Bronya starter-plus：OKX V5 REST 客户端（okex/open/api/service，Retrofit + fastjson2 + HmacSHA256 签名） -->
+        <dependency>
+            <groupId>cc.bronya</groupId>
+            <artifactId>bronya-sb-starter-plus</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

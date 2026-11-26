@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        PostgreSQL 系 starter 的归集包（纯聚合，不做父级继承 —— 与上级 ext/pom.xml 同一体例）。
+        每个子模块的 <parent> 仍是 bronya-starter（relativePath = ../../../pom.xml），
+        因此拆包/挪目录不改变任何依赖、属性与发布坐标，只改 reactor 的组织方式。
+
+        ⚠️ 新增 PG starter 时两处都要改：
+           1) 本文件的 <modules>
+           2) 子模块 pom 的 <relativePath>../../../pom.xml</relativePath>
+    -->
+    <parent>
+        <groupId>cc.bronya</groupId>
+        <artifactId>bronya-starter</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>bronya-sb-starter-pg</artifactId>
+    <packaging>pom</packaging>
+    <name>bronya-sb-starter-pg</name>
+    <description>PostgreSQL 能力 starter 归集（备份 / 布隆 / 缓存与 RESP / 序号 / 状态机 / jsonb / MQ / MQTT / 分区 / PostGIS / 检索 / 时序 / 向量 / 逻辑解码）</description>
+
+    <modules>
+        <module>bronya-sb-starter-pg-backup</module>
+        <module>bronya-sb-starter-pg-bloom</module>
+        <module>bronya-sb-starter-pg-cache</module>
+        <module>bronya-sb-starter-pg-cache-redis-server</module>
+        <module>bronya-sb-starter-pg-counter</module>
+        <module>bronya-sb-starter-pg-fsm</module>
+        <module>bronya-sb-starter-pg-jsonb</module>
+        <module>bronya-sb-starter-pg-mq</module>
+        <module>bronya-sb-starter-pg-mqtt</module>
+        <module>bronya-sb-starter-pg-partman</module>
+        <module>bronya-sb-starter-pg-postgis</module>
+        <module>bronya-sb-starter-pg-search</module>
+        <module>bronya-sb-starter-pg-timescale</module>
+        <module>bronya-sb-starter-pg-vector</module>
+        <module>bronya-sb-starter-pg-wal2json</module>
+    </modules>
+
+</project>
